@@ -2,22 +2,16 @@
 
 namespace Tsung\NovaUserManagement;
 
-use App\User;
+
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Events\ServingNova;
+use Laravel\Nova\Http\Controllers\LoginController;
 use Laravel\Nova\Nova;
 use Tsung\NovaUserManagement\Commands\Init;
 use Tsung\NovaUserManagement\Commands\Install;
 use Tsung\NovaUserManagement\Http\Middleware\Authorize;
-use Tsung\NovaUserManagement\Models\Permission;
-use Tsung\NovaUserManagement\Models\Role;
-use Tsung\NovaUserManagement\Policies\ActionEventPolicy;
-use Tsung\NovaUserManagement\Policies\PermissionPolicy;
-use Tsung\NovaUserManagement\Policies\RolePolicy;
-use Tsung\NovaUserManagement\Policies\UserPolicy;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -43,6 +37,8 @@ class ToolServiceProvider extends ServiceProvider
             $this->registerPolicies();
             Nova::tools($this->registerTools());
         });
+
+        $this->app->bind(LoginController::class, config('novauser.binds.login'));
     }
 
     protected function registerPublishing()

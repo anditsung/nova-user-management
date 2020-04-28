@@ -49,5 +49,9 @@ return [
              */
             'display_type' => 1,
         ]
+    ],
+
+    'binds' => [
+        'login' => \Tsung\NovaUserManagement\Http\Controllers\Auth\LoginController::class,
     ]
 ];
