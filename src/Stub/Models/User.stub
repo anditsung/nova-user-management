@@ -1,0 +1,67 @@
+<?php
+
+namespace App;
+
+
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Nova\Actions\Actionable;
+use Spatie\Permission\Traits\HasRoles;
+
+
+class User extends Authenticatable
+{
+    use Notifiable;
+    use HasRoles;
+    use Actionable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'user_id', 'is_active'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($user) {
+            if( !$user->user_id ) {
+                $user->user_id = auth()->user()->id;
+            }
+        });
+    }
+
+    public function administrator()
+    {
+        return $this->hasRole('administrator');
+    }
+
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}

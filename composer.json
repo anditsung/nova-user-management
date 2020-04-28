@@ -1,0 +1,37 @@
+{
+    "name": "tsung/nova-user-management",
+    "description": "User Management for Laravel Nova",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "authors": [
+        {
+            "name": "anditsung",
+            "email": "anditsung-at-gmail-dot-com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0",
+        "laravel/nova": "^2",
+        "spatie/laravel-permission": "^3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tsung\\NovaUserManagement\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tsung\\NovaUserManagement\\ToolServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
