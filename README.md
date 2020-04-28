@@ -29,3 +29,20 @@ Done
 
 preview
 
+User Index
+![user index](https://github.com/anditsung/nova-user-management/blob/master/preview/user-index.png?raw=true)
+
+User Form
+![user form](https://github.com/anditsung/nova-user-management/blob/master/preview/user-form.png?raw=true)
+
+Role Index
+![role index](https://github.com/anditsung/nova-user-management/blob/master/preview/role-index.png?raw=true)
+
+Role Form
+![role form](https://github.com/anditsung/nova-user-management/blob/master/preview/role-form.png?raw=true)
+
+Role Detail
+![role detail](https://github.com/anditsung/nova-user-management/blob/master/preview/role-detail.png?raw=true)
+
+Permission Index
+![permission index](https://github.com/anditsung/nova-user-management/blob/master/preview/permission-index.png?raw=true)
