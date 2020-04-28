@@ -26,3 +26,6 @@ php artisan novauser:install
 php artisan novauser:init
 ```
 Done
+
+preview
+
