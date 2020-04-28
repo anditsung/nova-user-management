@@ -20,11 +20,7 @@ class NovaUserManagement extends Tool
         Nova::script('nova-user-management', __DIR__.'/../dist/js/tool.js');
         Nova::style('nova-user-management', __DIR__.'/../dist/css/tool.css');
 
-        Nova::resources([
-            User::class,
-            Role::class,
-            Permission::class,
-        ]);
+        Nova::resources(config('novauser.resources'));
     }
 
     /**

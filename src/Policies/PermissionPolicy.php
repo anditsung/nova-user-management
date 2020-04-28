@@ -4,8 +4,6 @@
 namespace Tsung\NovaUserManagement\Policies;
 
 
-use App\User;
-
 class PermissionPolicy extends Policy
 {
     public static $key = "permissions";
@@ -13,7 +11,7 @@ class PermissionPolicy extends Policy
     /*
      * attach button visible
      */
-    public function attachAnyRole(User $user)
+    public function attachAnyRole($user)
     {
         return $user->hasPermissionTo('attachRole permissions');
     }
@@ -21,7 +19,7 @@ class PermissionPolicy extends Policy
     /*
      * able to add and update role
      */
-    public function attachRole(User $user)
+    public function attachRole($user)
     {
         if(request()->request->get('viaResource')) {
             return false;
@@ -29,7 +27,7 @@ class PermissionPolicy extends Policy
         return $user->hasPermissionTo('attachRole permissions');
     }
 
-    public function detachRole(User $user)
+    public function detachRole($user)
     {
         return $user->hasPermissionTo('detachRole permissions');
     }
@@ -37,7 +35,7 @@ class PermissionPolicy extends Policy
     /*
      * attach button visible
      */
-    public function attachAnyUser(User $user)
+    public function attachAnyUser($user)
     {
         return $user->hasPermissionTo('attachUser ' . static::$key);
     }
@@ -45,7 +43,7 @@ class PermissionPolicy extends Policy
     /*
      * able to add and update role
      */
-    public function attachUser(User $user)
+    public function attachUser($user)
     {
         if(request()->request->get('viaResource')) {
             return false;
@@ -53,7 +51,7 @@ class PermissionPolicy extends Policy
         return $user->hasPermissionTo('attachUser ' . static::$key);
     }
 
-    public function detachUser(User $user)
+    public function detachUser($user)
     {
         return $user->hasPermissionTo('detachUser ' . static::$key);
     }

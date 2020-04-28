@@ -4,7 +4,6 @@
 namespace Tsung\NovaUserManagement\Policies;
 
 
-use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class Policy
@@ -14,7 +13,7 @@ class Policy
     /*
      * User able to access the index
      */
-    public function viewAny(User $user)
+    public function viewAny($user)
     {
         return $user->hasPermissionTo('viewAny ' . static::$key);
     }
@@ -22,7 +21,7 @@ class Policy
     /*
      * User able to view detail
      */
-    public function view(User $user, $model)
+    public function view($user, $model)
     {
         if( $user->hasPermissionTo('view ' . static::$key) ) {
             return true;
@@ -34,7 +33,7 @@ class Policy
     /*
      * User able to create
      */
-    public function create(User $user)
+    public function create($user)
     {
         return $user->hasPermissionTo('create ' . static::$key);
     }
@@ -42,7 +41,7 @@ class Policy
     /*
      * User able to update
      */
-    public function update(User $user, $model)
+    public function update($user, $model)
     {
         if( $user->hasPermissionTo('update ' . static::$key) ) {
             return true;
@@ -54,7 +53,7 @@ class Policy
     /*
      * User able to delete
      */
-    public function delete(User $user, $model)
+    public function delete($user, $model)
     {
         if( $user->hasPermissionTo('delete ' . static::$key) ) {
             return true;
@@ -66,7 +65,7 @@ class Policy
     /*
      * User able to restore
      */
-    public function restore(User $user, $model)
+    public function restore($user, $model)
     {
 
         if( $user->hasPermissionTo('restore ' . static::$key) ) {
@@ -79,7 +78,7 @@ class Policy
     /*
      * User able to force delete
      */
-    public function forceDelete(User $user, $model)
+    public function forceDelete($user, $model)
     {
         if( $user->hasPermissionTo('forceDelete ' . static::$key) ) {
             return true;
@@ -92,7 +91,7 @@ class Policy
      * if this model have comment and need policy for it
      * change ModelName to Model want to be add
      */
-    public function addModelName(User $user, $model)
+    public function addModelName($user, $model)
     {
         return true;
     }
@@ -101,7 +100,7 @@ class Policy
      * if this model can attach comment
      * change ModelName to Model want to be attach
      */
-    public function attachModelName(User $user)
+    public function attachModelName($user)
     {
         // hide edit / update when access from viaResource
         if(request()->request->get('viaResource')) {
@@ -114,7 +113,7 @@ class Policy
      * if this model can detach comment,
      * change ModelName to Model want to be detach
      */
-    public function detachModelName(User $user)
+    public function detachModelName($user)
     {
         return $user->hasPermissionTo('detachUser ' . static::$key);
     }
@@ -123,7 +122,7 @@ class Policy
      *  this will prevent attach button displaying in the nova UI
      * change ModelName to Model that user cannot see attach button
      */
-    public function attachAnyModelName(User $user, $model)
+    public function attachAnyModelName($user, $model)
     {
         return $user->hasPermissionTo('attachRole ' . static::$key);
     }

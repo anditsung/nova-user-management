@@ -15,6 +15,10 @@ php artisan nova:install
 ```
 
 Install User Management
+if install using folder run this first
+```
+composer config repositories.nova-user-management path [PACKAGE_PATH]
+```
 ```
 composer require tsung/nova-user-management
 php artisan migrate

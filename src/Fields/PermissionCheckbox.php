@@ -13,7 +13,6 @@ class PermissionCheckbox extends Field
 
     public static $LIST = 1;
     public static $LIST_DROPDOWN = 2;
-    public static $DROPDOWN = 3;
 
     public function __construct($name, $attribute = null, callable $resolveCallback = null)
     {
@@ -21,7 +20,7 @@ class PermissionCheckbox extends Field
 
         $this->showOnIndex(false);
         $this->allPermissions();
-        $this->displayType(2);
+        $this->displayType(config('novauser.fields.permission-checkbox.display_type'));
     }
 
     public function displayType($displayType)

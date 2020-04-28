@@ -4,11 +4,9 @@
 namespace Tsung\NovaUserManagement\Policies;
 
 
-use App\User;
-
 class ActionEventPolicy
 {
-    public function viewAny(User $user)
+    public function viewAny($user)
     {
         try {
             return $user->hasPermissionTo('view actions');
@@ -17,7 +15,7 @@ class ActionEventPolicy
         }
     }
 
-    public function view(User $user)
+    public function view($user)
     {
         try {
             return $user->hasPermissionTo('view actions');

@@ -21,6 +21,10 @@ class Install extends Command
         $this->info('Replacing Default User Nova');
         $this->replaceUserNova();
         $this->info("Done");
+
+        $this->info("Publish Novauser Config");
+        $this->publishConfig();
+        $this->info('Done');
     }
 
     private function replaceUserModel()
@@ -31,5 +35,10 @@ class Install extends Command
     private function replaceUserNova()
     {
         copy(__DIR__.'/../Stub/Nova/User.stub', app_path('Nova/User.php'));
+    }
+
+    private function publishConfig()
+    {
+        $this->call('vendor:publish', ['--tag' => 'novauser-config']);
     }
 }

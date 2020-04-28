@@ -28,6 +28,10 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if($this->app->runningInConsole()) {
+            $this->registerPublishing();
+        }
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova-user-management');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
@@ -41,7 +45,12 @@ class ToolServiceProvider extends ServiceProvider
         });
     }
 
-
+    protected function registerPublishing()
+    {
+        $this->publishes([
+            __DIR__ . '/../config' => config_path('/'),
+        ], 'novauser-config');
+    }
 
     public function registerPolicies()
     {
@@ -52,10 +61,10 @@ class ToolServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::policy(ActionEvent::class, ActionEventPolicy::class);
-        Gate::policy(User::class, UserPolicy::class);
-        Gate::policy(Role::class, RolePolicy::class);
-        Gate::policy(Permission::class, PermissionPolicy::class);
+        Gate::policy(config('novauser.gates.action.model'), config('novauser.gates.action.policy'));
+        Gate::policy(config('novauser.gates.user.model'), config('novauser.gates.user.policy'));
+        Gate::policy(config('novauser.gates.role.model'), config('novauser.gates.role.policy'));
+        Gate::policy(config('novauser.gates.permission.model'), config('novauser.gates.permission.policy'));
     }
 
     protected function registerTools()

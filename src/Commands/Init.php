@@ -4,11 +4,8 @@
 namespace Tsung\NovaUserManagement\Commands;
 
 
-use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
-use Tsung\NovaUserManagement\Models\Permission;
-use Tsung\NovaUserManagement\Models\Role;
 
 class Init extends Command
 {
@@ -19,21 +16,26 @@ class Init extends Command
     public function handle()
     {
         $guard = config('nova.guard') ?: config('auth.defaults.guard');
+        $userModel = config('novauser.gates.user.model');
+        $roleModel = config('novauser.gates.role.model');
+        $permissionModel = config('novauser.gates.permission.model');
+
+        $this->info($roleModel);
 
         $this->info("Create User");
-        $user = $this->createUser();
+        $user = $this->createUser($userModel);
         $this->info("Done");
 
         $this->info("Create administrator Role");
-        $role = $this->createAdministratorRole($user, $guard);
+        $role = $this->createAdministratorRole($user, $guard, $roleModel);
         $this->info("Done");
 
         $this->info("Create default permissions");
-        $this->initDefaultPermissions($user, Permission::class, $guard);
+        $this->initDefaultPermissions($user, $permissionModel, $guard);
         $this->info("Done");
 
         $this->info("Set default permissions to {$role->name}");
-        $role->givePermissionTo(Permission::all());
+        $role->givePermissionTo($permissionModel::all());
         $this->info("Done");
 
         $this->info("Set {$role->name} to {$user->name}");
@@ -43,11 +45,11 @@ class Init extends Command
         $this->info("Finish");
     }
 
-    private function createAdministratorRole($user, $guard)
+    private function createAdministratorRole($user, $guard, $roleModel)
     {
-        $role = Role::where('name', 'administrator')->first();
+        $role = $roleModel::where('name', 'administrator')->first();
         if(!$role) {
-            $role = Role::create([
+            $role = $roleModel::create([
                 'name' => 'administrator',
                 'guard_name' => $guard,
                 'user_id' => $user->id,
@@ -56,14 +58,14 @@ class Init extends Command
         return $role;
     }
 
-    private function createUser()
+    private function createUser($userModel)
     {
         $name = $this->ask('Name');
         $email = $this->ask('Email Address');
         $password = $this->ask('Password');
-        $user = User::where('email', $email)->first();
+        $user = $userModel::where('email', $email)->first();
         if(!$user) {
-            $user = User::create([
+            $user = $userModel::create([
                 'name' => $name,
                 'email' => $email,
                 'password' => Hash::make($password),
