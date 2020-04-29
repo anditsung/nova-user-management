@@ -27,6 +27,18 @@ php artisan novauser:init
 ```
 Done
 
+====================
+
+On production env, need to change gate method on NovaServiceProvider
+this method will check if the user can access nova, on this method cannot use "can" but "hasPermissionTo" will work fine
+```
+Gate::define('viewNova', function($user) {
+    return $user->hasPermissionTo('viewNova');
+});
+```
+
+====================
+
 preview
 
 User Index

@@ -5,12 +5,13 @@ namespace Tsung\NovaUserManagement\Http\Controllers\Auth;
 
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Http\Controllers\LoginController as NovaLoginController;
 
-class LoginController extends \Laravel\Nova\Http\Controllers\LoginController
+class LoginController extends NovaLoginController
 {
     protected function authenticated(Request $request, $user)
     {
-        if($user->administrator() || $user->can('backend')) {
+        if($user->administrator() || $user->can('viewNova')) {
             return redirect(config('nova.path'));
         }
 

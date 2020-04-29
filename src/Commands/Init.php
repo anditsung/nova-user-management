@@ -112,7 +112,7 @@ class Init extends Command
     private function systemPermissions()
     {
         return [
-            'backend' => 'System',
+            'viewNova' => 'System',
             'view actions' => 'ActionResource',
         ];
     }
