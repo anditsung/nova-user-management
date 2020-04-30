@@ -3,7 +3,6 @@
 namespace Tsung\NovaUserManagement\Models;
 
 
-use App\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Nova\Actions\Actionable;
 use Spatie\Permission\Models\Role as SpatieRoleModel;
@@ -31,6 +30,6 @@ class Role extends SpatieRoleModel
 
     public function user() : BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(config('auth.providers.users.model'));
     }
 }

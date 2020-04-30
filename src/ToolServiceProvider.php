@@ -66,7 +66,7 @@ class ToolServiceProvider extends ServiceProvider
         });
 
         Gate::policy(config('novauser.gates.action.model'), config('novauser.gates.action.policy'));
-        Gate::policy(config('novauser.gates.user.model'), config('novauser.gates.user.policy'));
+        Gate::policy(config('auth.providers.users.model'), config('novauser.gates.user.policy'));
         Gate::policy(config('novauser.gates.role.model'), config('novauser.gates.role.policy'));
         Gate::policy(config('novauser.gates.permission.model'), config('novauser.gates.permission.policy'));
     }
@@ -93,7 +93,7 @@ class ToolServiceProvider extends ServiceProvider
                 ->prefix('nova-vendor/nova-user-management')
                 ->group(__DIR__.'/../routes/api.php');
 
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
     }
 
     /**

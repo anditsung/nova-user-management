@@ -54,6 +54,11 @@ return [
     'binds' => [
         'login' => \Tsung\NovaUserManagement\Http\Controllers\Auth\LoginController::class,
 
-        'authorize' => \Tsung\NovaUserManagement\Http\Middleware\CustomAuthorize::class,
-    ]
+        'authorize' => \Tsung\NovaUserManagement\Http\Middleware\NovauserAuthorize::class,
+    ],
+
+    /*
+     * set true to show actions resource on navigation
+     */
+    'show-actions' => false,
 ];

@@ -20,7 +20,7 @@ class LoginController extends NovaLoginController
 
     private function isActive($user)
     {
-        $userModel = config('novauser.gates.user.model');
+        $userModel = config('auth.providers.users.model');
         $user = $userModel::where($this->username(), $user)->first();
         if($user) {
             return $user->is_active;

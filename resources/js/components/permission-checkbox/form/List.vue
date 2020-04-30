@@ -12,7 +12,7 @@
                 :key="group"
                 class="flex flex-col mb-4 pr-4 w-1/2"
             >
-                <div class="p-3 bg-40 border-l border-t border-r border-60">
+                <div class="flex p-3 bg-40 border-l border-t border-r border-60">
                     <h4>{{ group }}</h4>
                 </div>
 
@@ -116,6 +116,14 @@
                 }
                 this.check(option);
             },
-        }
+
+            selectAllGroupName(group) {
+                return "Select all " + group
+            },
+
+            toggleGroup(group) {
+
+            }
+        },
     }
 </script>

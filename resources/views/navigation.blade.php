@@ -48,6 +48,19 @@
             </li>
         @endcan
 
+        @if(Config::get('novauser.show-actions') == true)
+            <li class="leading-wide mb-4 text-sm">
+                <router-link :to="{
+                name: 'index',
+                params: {
+                    resourceName: 'action-events'
+                }
+            }" class="text-white ml-8 no-underline dim">
+                    {{ __("Actions") }}
+                </router-link>
+            </li>
+        @endif
+
     </template>
 </nova-sidebar>
 @endcanany

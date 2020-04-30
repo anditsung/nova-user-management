@@ -2,11 +2,9 @@
 
 namespace Tsung\NovaUserManagement;
 
-use App\Nova\User;
+
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
-use Tsung\NovaUserManagement\Nova\Permission;
-use Tsung\NovaUserManagement\Nova\Role;
 
 class NovaUserManagement extends Tool
 {

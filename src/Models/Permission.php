@@ -4,7 +4,6 @@
 namespace Tsung\NovaUserManagement\Models;
 
 
-use App\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Nova\Actions\Actionable;
 use Spatie\Permission\Models\Permission as SpatiePermissionModel;
@@ -33,6 +32,6 @@ class Permission extends SpatiePermissionModel
 
     public function user() : BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(config('auth.providers.users.model'));
     }
 }

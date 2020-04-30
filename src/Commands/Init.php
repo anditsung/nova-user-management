@@ -16,7 +16,7 @@ class Init extends Command
     public function handle()
     {
         $guard = config('nova.guard') ?: config('auth.defaults.guard');
-        $userModel = config('novauser.gates.user.model');
+        $userModel = config('auth.providers.users.model');
         $roleModel = config('novauser.gates.role.model');
         $permissionModel = config('novauser.gates.permission.model');
 
