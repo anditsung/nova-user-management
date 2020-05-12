@@ -44,17 +44,6 @@ class User extends Authenticatable
         'is_active' => 'boolean',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        self::creating(function($user) {
-            if( !$user->user_id ) {
-                $user->user_id = auth()->user()->id;
-            }
-        });
-    }
-
     public function administrator()
     {
         return $this->hasRole('administrator');

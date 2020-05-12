@@ -4,6 +4,7 @@
 namespace Tsung\NovaUserManagement\Nova;
 
 
+use App\Nova\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
@@ -11,6 +12,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Outhebox\NovaHiddenField\HiddenField;
 use Tsung\NovaUserManagement\Fields\PermissionCheckbox;
 use Tsung\NovaUserManagement\Models\Role as RoleModel;
 use Laravel\Nova\Nova;
@@ -68,10 +70,11 @@ class Role extends ResourceForUser
                 ->options($guardOptions->toArray())
                 ->rules(['required', Rule::in($guardOptions)]),
 
-            BelongsTo::make(__('User'))
-                ->hideFromIndex()
-                ->hideWhenCreating()
-                ->hideWhenUpdating(),
+            HiddenField::make('User', 'user_id')
+                ->current_user_id(),
+
+            BelongsTo::make(_('Created By'), 'user', User::class)
+                ->onlyOnDetail(),
 
             PermissionCheckbox::make(__('Permissions')),
 

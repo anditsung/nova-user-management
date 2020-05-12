@@ -29,6 +29,7 @@ abstract class ResourceForUser extends NovaResource
         }
         else {
             if ($user->administrator()) {
+
                 return parent::relatableQuery($request, $query);
             }
 
@@ -61,6 +62,7 @@ abstract class ResourceForUser extends NovaResource
         }
         else {
             if ($user->administrator()) {
+
                 return parent::relatableQuery($request, $query);
             }
 
@@ -87,6 +89,8 @@ abstract class ResourceForUser extends NovaResource
         $user = $request->user();
 
         if ($user->administrator()) {
+
+            //$query = $query->where('is_active', true);
             return parent::relatableQuery($request, $query);
         }
 

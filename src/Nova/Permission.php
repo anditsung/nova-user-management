@@ -4,6 +4,7 @@
 namespace Tsung\NovaUserManagement\Nova;
 
 
+use App\Nova\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -14,6 +15,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
+use Outhebox\NovaHiddenField\HiddenField;
 use Tsung\NovaUserManagement\Models\Permission as PermissionModel;
 
 class Permission extends ResourceForUser
@@ -94,10 +96,11 @@ class Permission extends ResourceForUser
                 ->rules(['required', Rule::in($guardOptions)])
                 ->hideFromIndex(),
 
-            BelongsTo::make(_('User'))
-                ->hideFromIndex()
-                ->hideWhenCreating()
-                ->hideWhenUpdating(),
+            HiddenField::make('User', 'user_id')
+                ->current_user_id(),
+
+            BelongsTo::make(_('Created By'), 'user', User::class)
+                ->onlyOnDetail(),
 
             BelongsToMany::make(__('Roles'), 'roles', Role::class),
 
