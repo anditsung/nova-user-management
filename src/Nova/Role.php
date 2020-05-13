@@ -8,6 +8,7 @@ use App\Nova\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
@@ -69,6 +70,8 @@ class Role extends ResourceForUser
             Select::make(__('Guard Name'), 'guard_name')
                 ->options($guardOptions->toArray())
                 ->rules(['required', Rule::in($guardOptions)]),
+
+            Boolean::make('Active', 'is_active'),
 
             HiddenField::make('User', 'user_id')
                 ->current_user_id()

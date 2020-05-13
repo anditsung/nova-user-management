@@ -14,7 +14,12 @@ class Role extends SpatieRoleModel
     protected $fillable = [
         'name',
         'guard_name',
+        'is_active',
         'user_id'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean'
     ];
 
     protected static function boot()

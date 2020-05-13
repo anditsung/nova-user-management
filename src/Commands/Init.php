@@ -52,6 +52,7 @@ class Init extends Command
             $role = $roleModel::create([
                 'name' => 'administrator',
                 'guard_name' => $guard,
+                'is_active' => true,
                 'user_id' => $user->id,
             ]);
         }
