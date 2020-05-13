@@ -65,10 +65,9 @@ class ToolServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::policy(config('novauser.gates.action.model'), config('novauser.gates.action.policy'));
-        Gate::policy(config('auth.providers.users.model'), config('novauser.gates.user.policy'));
-        Gate::policy(config('novauser.gates.role.model'), config('novauser.gates.role.policy'));
-        Gate::policy(config('novauser.gates.permission.model'), config('novauser.gates.permission.policy'));
+        foreach(config('novauser.gates') as $gate => $value) {
+            Gate::policy($value['model'], $value['policy']);
+        }
     }
 
     protected function registerTools()

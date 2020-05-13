@@ -78,19 +78,15 @@ class Init extends Command
 
     private function initDefaultPermissions($user, $permissionModel, $guard)
     {
-        $models = [
-            'Users',
-            'Roles',
-            'Permissions',
-        ];
+        $resources = config('novauser.resources');
 
         $systemPermissions = $this->systemPermissions();
         foreach($systemPermissions as $name => $group) {
             $this->addPermissions($user, $permissionModel, $name, $group, $guard);
         }
 
-        foreach($models as $model) {
-            $modelPermissions = $this->defaultPermissions($model);
+        foreach($resources as $resource) {
+            $modelPermissions = $this->defaultPermissions($resource::label());
             foreach($modelPermissions as $name => $group) {
                 $this->addPermissions($user, $permissionModel, $name, $group, $guard);
             }
