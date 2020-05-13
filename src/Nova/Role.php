@@ -71,7 +71,8 @@ class Role extends ResourceForUser
                 ->rules(['required', Rule::in($guardOptions)]),
 
             HiddenField::make('User', 'user_id')
-                ->current_user_id(),
+                ->current_user_id()
+                ->onlyOnForms(),
 
             BelongsTo::make(_('Created By'), 'user', User::class)
                 ->onlyOnDetail(),

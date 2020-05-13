@@ -97,7 +97,8 @@ class Permission extends ResourceForUser
                 ->hideFromIndex(),
 
             HiddenField::make('User', 'user_id')
-                ->current_user_id(),
+                ->current_user_id()
+                ->onlyOnForms(),
 
             BelongsTo::make(_('Created By'), 'user', User::class)
                 ->onlyOnDetail(),

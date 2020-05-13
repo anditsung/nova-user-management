@@ -69,7 +69,8 @@ class User extends ResourceForUser
                 ->updateRules('nullable', 'string', 'min:8'),
 
             HiddenField::make('User', 'user_id')
-                ->current_user_id(),
+                ->current_user_id()
+                ->onlyOnForms(),
 
             BelongsTo::make(_('Created By'), 'user', User::class)
                 ->onlyOnDetail(),

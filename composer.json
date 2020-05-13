@@ -16,7 +16,8 @@
         "php": ">=7.1.0",
         "laravel/nova": "^2",
         "spatie/laravel-permission": "^3",
-        "outhebox/nova-hidden-field": "^1.0"
+        "outhebox/nova-hidden-field": "^1.0",
+        "tsung/nova-custom": "*"
     },
     "autoload": {
         "psr-4": {
