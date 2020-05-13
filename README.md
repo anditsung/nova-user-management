@@ -29,6 +29,8 @@ Done
 
 ====================
 
+>already add function to patch this when execute install command ( 13-05-2020 )
+
 On production env, need to change gate method on NovaServiceProvider
 this method will check if the user can access nova, on this method cannot use "can" but "hasPermissionTo" will work fine
 ```
