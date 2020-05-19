@@ -44,19 +44,19 @@ Gate::define('viewNova', function($user) {
 preview
 
 User Index
-![user index](https://github.com/anditsung/nova-user-management/blob/master/preview/user-index.png?raw=true)
+![user index](https://github.com/anditsung/nova-user-management/blob/nova2/preview/user-index.png?raw=true)
 
 User Form
-![user form](https://github.com/anditsung/nova-user-management/blob/master/preview/user-form.png?raw=true)
+![user form](https://github.com/anditsung/nova-user-management/blob/nova2/preview/user-form.png?raw=true)
 
 Role Index
-![role index](https://github.com/anditsung/nova-user-management/blob/master/preview/role-index.png?raw=true)
+![role index](https://github.com/anditsung/nova-user-management/blob/nova2/preview/role-index.png?raw=true)
 
 Role Form
-![role form](https://github.com/anditsung/nova-user-management/blob/master/preview/role-form.png?raw=true)
+![role form](https://github.com/anditsung/nova-user-management/blob/nova2/preview/role-form.png?raw=true)
 
 Role Detail
-![role detail](https://github.com/anditsung/nova-user-management/blob/master/preview/role-detail.png?raw=true)
+![role detail](https://github.com/anditsung/nova-user-management/blob/nova2/preview/role-detail.png?raw=true)
 
 Permission Index
-![permission index](https://github.com/anditsung/nova-user-management/blob/master/preview/permission-index.png?raw=true)
+![permission index](https://github.com/anditsung/nova-user-management/blob/nova2/preview/permission-index.png?raw=true)
