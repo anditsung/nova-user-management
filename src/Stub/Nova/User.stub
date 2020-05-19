@@ -4,13 +4,13 @@ namespace App\Nova;
 
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
-use Outhebox\NovaHiddenField\HiddenField;
 use Tsung\NovaUserManagement\Nova\ResourceForUser;
 use Tsung\NovaUserManagement\Nova\Role;
 use Tsung\NovaUserManagement\Nova\Permission;
@@ -68,14 +68,15 @@ class User extends ResourceForUser
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
-            HiddenField::make('User', 'user_id')
-                ->current_user_id()
-                ->onlyOnForms(),
+            Hidden::make('User', 'user_id')->default(function($request) {
+                return $request->user()->id;
+            }),
 
             BelongsTo::make(_('Created By'), 'user', User::class)
                 ->onlyOnDetail(),
 
-            Boolean::make('Active', 'is_active'),
+            Boolean::make('Active', 'is_active')
+                ->default(true),
 
             MorphToMany::make(__('Roles'), 'roles', Role::class ),
 

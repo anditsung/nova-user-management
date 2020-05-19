@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Outhebox\NovaHiddenField\HiddenField;
 use Tsung\NovaUserManagement\Fields\PermissionCheckbox;
 use Tsung\NovaUserManagement\Models\Role as RoleModel;
 use Laravel\Nova\Nova;
@@ -71,11 +71,12 @@ class Role extends ResourceForUser
                 ->options($guardOptions->toArray())
                 ->rules(['required', Rule::in($guardOptions)]),
 
-            Boolean::make('Active', 'is_active'),
+            Boolean::make('Active', 'is_active')
+                ->default(true),
 
-            HiddenField::make('User', 'user_id')
-                ->current_user_id()
-                ->onlyOnForms(),
+            Hidden::make('User', 'user_id')->default(function($request) {
+                return $request->user()->id;
+            }),
 
             BelongsTo::make(_('Created By'), 'user', User::class)
                 ->onlyOnDetail(),
