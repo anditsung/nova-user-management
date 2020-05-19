@@ -15,6 +15,7 @@
     "require": {
         "php": ">=7.1.0",
         "laravel/nova": "^2",
+        "laravel/framework": "^6.0",
         "spatie/laravel-permission": "^3",
         "outhebox/nova-hidden-field": "^1.0"
     },
