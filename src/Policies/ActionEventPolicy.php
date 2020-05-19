@@ -8,19 +8,15 @@ class ActionEventPolicy
 {
     public function viewAny($user)
     {
-        try {
-            return $user->hasPermissionTo('view actions');
-        } catch (\Exception $exception) {
-            return true;
-        }
+        return $user->hasPermissionTo('viewAny actions');
     }
 
-    public function view($user)
+    public function view($user, $model)
     {
-        try {
-            return $user->hasPermissionTo('view actions');
-        } catch (\Exception $exception) {
+        if( $user->hasPermissionTo('view actions') ) {
             return true;
         }
+
+        return $user->id == $model->user_id;
     }
 }
