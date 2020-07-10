@@ -37,4 +37,13 @@ class LoginController extends NovaLoginController
 
         return parent::login($request);
     }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect('/');
+    }
 }
