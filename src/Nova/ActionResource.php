@@ -25,6 +25,8 @@ class ActionResource extends Resource
      */
     public static $model = ActionEvent::class;
 
+    public static $globallySearchable = false;
+
     /**
      * Determine if the current user can create new resources.
      *
