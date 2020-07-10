@@ -4,12 +4,13 @@
 namespace Tsung\NovaUserManagement\Http\Middleware;
 
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Nova;
 use Spatie\Permission\PermissionRegistrar;
 
 class NovauserAuthorize
 {
-    public function handle($request, $next)
+    public function handle(Request $request, $next)
     {
         if(Nova::check($request)) {
 
@@ -20,6 +21,12 @@ class NovauserAuthorize
             return $next($request);
         }
         else {
+            // allow user to logout if dont have viewNova permission
+            if ($request->getPathInfo() == '/nova/logout') {
+
+                return $next($request);
+
+            }
             // if the user dont have viewNova permissions then redirect to '/'
             // return abort(403);
             return redirect('/');
