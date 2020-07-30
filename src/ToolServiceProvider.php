@@ -65,9 +65,9 @@ class ToolServiceProvider extends ServiceProvider
             }
         });
 
-        foreach(config('novauser.gates') as $gate => $value) {
-            Gate::policy($value['model'], $value['policy']);
-        }
+//        foreach(config('novauser.gates') as $gate => $value) {
+//            Gate::policy($value['model'], $value['policy']);
+//        }
     }
 
     protected function registerTools()

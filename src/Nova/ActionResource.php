@@ -4,6 +4,7 @@
 namespace Tsung\NovaUserManagement\Nova;
 
 
+use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
@@ -13,7 +14,6 @@ use Laravel\Nova\Fields\Status;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Resource;
 use Tsung\NovaUserManagement\Models\ActionEvent;
 
 class ActionResource extends Resource

@@ -4,6 +4,7 @@
 namespace Tsung\NovaUserManagement\Nova;
 
 
+use App\Nova\Resource;
 use App\Nova\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -17,9 +18,13 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 use Tsung\NovaUserManagement\Models\Permission as PermissionModel;
+use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
+use Tsung\NovaUserManagement\Traits\ResourceRedirectIndex;
 
-class Permission extends ResourceForUser
+class Permission extends Resource
 {
+    use ResourceAuthorization,
+        ResourceRedirectIndex;
     /**
      * The model the resource corresponds to.
      *
@@ -42,6 +47,8 @@ class Permission extends ResourceForUser
     public static $search = [
         'name', 'group'
     ];
+
+    public static $group = 'User Management';
 
     public static $displayInNavigation = false;
 
@@ -80,7 +87,7 @@ class Permission extends ResourceForUser
         $group = $this->allResources($request);
 
         return [
-            ID::make()->sortable(),
+            //ID::make()->sortable(),
 
             Text::make(__('Name'), 'name')
                 ->rules(['required', 'string', 'max:255'])

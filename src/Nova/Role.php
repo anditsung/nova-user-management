@@ -4,6 +4,7 @@
 namespace Tsung\NovaUserManagement\Nova;
 
 
+use App\Nova\Resource;
 use App\Nova\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -17,9 +18,14 @@ use Laravel\Nova\Fields\Text;
 use Tsung\NovaUserManagement\Fields\PermissionCheckbox;
 use Tsung\NovaUserManagement\Models\Role as RoleModel;
 use Laravel\Nova\Nova;
+use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
+use Tsung\NovaUserManagement\Traits\ResourceQueries;
 
-class Role extends ResourceForUser
+class Role extends Resource
 {
+    use ResourceAuthorization;
+    use ResourceQueries;
+
     /**
      * The model the resource corresponds to.
      *
@@ -43,6 +49,8 @@ class Role extends ResourceForUser
         'name',
     ];
 
+    public static $group = 'User Management';
+
     public static $displayInNavigation = false;
 
     /**
@@ -60,7 +68,7 @@ class Role extends ResourceForUser
         $userResource = Nova::resourceForModel(getModelForGuard($this->guard_name));
 
         return [
-            ID::make()->sortable(),
+            //ID::make()->sortable(),
 
             Text::make(__('Name'))
                 ->rules(['required', 'string', 'max:255'])
