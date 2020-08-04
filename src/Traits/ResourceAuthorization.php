@@ -74,7 +74,7 @@ trait ResourceAuthorization
 
                 }
 
-                return self::hasPermission($request, 'viewAny ' . parent::uriKey());
+                return self::hasPermission($request, 'view ' . parent::uriKey());
 
             }
             /**
