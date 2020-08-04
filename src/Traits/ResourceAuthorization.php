@@ -220,7 +220,10 @@ trait ResourceAuthorization
         if( self::hasPermission( $request, 'update ' . parent::uriKey() ) ) {
             return true;
         } else {
-            return self::hasPermission( $request, 'updateOwn ' . parent::uriKey() );
+            if ( parent::model()->user_id == $user->id ) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -239,7 +242,10 @@ trait ResourceAuthorization
         if( self::hasPermission($request, 'delete ' . parent::uriKey()) ) {
             return true;
         } else {
-            return self::hasPermission( $request, 'deleteOwn ' . parent::uriKey() );
+            if ( parent::model()->user_id == $user->id ) {
+                return true;
+            }
+            return false;
         }
     }
 
