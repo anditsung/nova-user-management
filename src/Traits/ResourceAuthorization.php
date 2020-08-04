@@ -110,10 +110,6 @@ trait ResourceAuthorization
              */
             return self::hasPermission($request, 'viewAny ' . parent::uriKey());
 
-        } else {
-
-            return false;
-
         }
 
 //        if ( $request instanceof ResourceIndexRequest ) {
