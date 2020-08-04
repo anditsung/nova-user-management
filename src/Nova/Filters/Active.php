@@ -9,6 +9,8 @@ use Laravel\Nova\Filters\Filter;
 
 class Active extends Filter
 {
+    public $defaultFilter = '';
+
     /**
      * The filter's component.
      *
@@ -41,5 +43,17 @@ class Active extends Filter
             'Active' => 1,
             'Not Active' => 0
         ];
+    }
+
+    public function default()
+    {
+        return $this->defaultFilter;
+    }
+
+    public function setFilter($filter)
+    {
+        $this->defaultFilter = $filter;
+
+        return $this;
     }
 }
