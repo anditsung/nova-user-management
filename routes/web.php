@@ -22,7 +22,7 @@ Route::group(['middleware'=> 'web'], function() {
                 echo "PERMISSION FOR {$user->name}<br>";
                 foreach($permissions as $permission) {
                     $text = "";
-                    if($user->can($permission->name)) {
+                    if($user->hasPermissionTo($permission->name)) {
                         $text .= "<b style='color: green'>allow</b>";
                     }
                     else {

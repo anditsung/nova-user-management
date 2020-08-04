@@ -39,7 +39,10 @@ trait ResourceAuthorization
      */
     public static function availableForNavigation( Request $request )
     {
-        return self::hasPermission( $request, 'viewAny ' . parent::uriKey() );
+        if ( static::$displayInNavigation ) {
+            return self::hasPermission( $request, 'viewAny ' . parent::uriKey() );
+        }
+        return false;
     }
 
     /**
@@ -50,44 +53,123 @@ trait ResourceAuthorization
      */
     public static function authorizedToViewAny( Request $request )
     {
+        /**
+         * jika $request instanceof ResourceIndexRequest
+         * berarti resource awal sedang mengakses request lain agar bisa ditampilkan di detail resource tersebut
+         *
+         * jika $request instanceof ResourceDetailRequest
+         * ini yang menentukan field yang bisa ditampilkan pada detail view pada resource tersebut
+         *
+         * jika $request intanceof NovaRequest
+         * disini menentukan resource tersebut bisa diakses
+         */
+
         if ( $request instanceof ResourceIndexRequest ) {
 
-            // jika resource di akses dari resource yang lain
-            if ($request->viaResource ) {
+            if ( $request->resource === parent::uriKey() ) {
 
-                // disini menentukan resource bisa diakses dari tempat lain
-                return true;
+                if ( $request->viaResource ) {
+
+                    return true;
+
+                }
+
+                return self::hasPermission($request, 'viewAny ' . parent::uriKey());
 
             }
-
-            // jika resource di akses langsung
-            return self::hasPermission($request, 'viewAny ' . parent::uriKey());
+            /**
+             * return true jika ingin selalu tampilkan field di index walau user tersebut tidak ada akses ke resource yang dituju
+             * tp tidak ada link ke resource tersebut jika tidak view permission untuk resource tersebut
+             */
+            return self::hasPermission($request, 'view ' . parent::uriKey());
 
         } else if ( $request instanceof ResourceDetailRequest ) {
-            // disini menentukan detail bisa dilihat
-            // disini menentukan field di resource tersebut bisa dilihat dari resource lain
-            if ( self::hasPermission( $request, 'view ' . parent::uriKey() ) ) {
+
+            if ( $request->resource === parent::uriKey() ) {
+
+                return self::hasPermission($request, 'view ' . parent::uriKey());
+
+            }
+            /**
+             * return true jika ingin selalu tampilkan field di index walau user tersebut tidak ada akses ke resource yang dituju
+             * dan tidak ada link ke resource tersebut
+             */
+            return self::hasPermission($request, 'view ' . parent::uriKey());
+
+        } else if ( $request instanceof NovaRequest ) {
+
+            if ( $request->resource ) {
 
                 return true;
 
-            } else {
-                // tidak bisa melihat resource yang bukan milik user tersebut
-
-                $model = parent::newModel()->find($request->resourceId);
-                if($model) {
-                    return true;
-                    if ( $model->user_id == $request->user()->id ) {
-                        return true;
-                    }
-                    return true;
-                }
-                return false;
             }
+
+        } else if ( $request instanceof Request ) {
+            /**
+             * disini mementukan resource tersebut bisa tampil di sidebar laravel nova
+             */
+            return self::hasPermission($request, 'viewAny ' . parent::uriKey());
+
+        } else {
+
+            return false;
+
         }
-        // disini menentukan resource bisa diakses dari resource lain
-        return true;
-        // jika resource di akses langsung
-        //return self::hasPermission( $request, 'viewAny ' . parent::uriKey() );
+
+//        if ( $request instanceof ResourceIndexRequest ) {
+//            \Debugbar::info(parent::uriKey());
+//            // jika resource di akses dari resource yang lain
+//            if ($request->viaResource ) {
+//
+//                // disini menentukan resource bisa diakses dari tempat lain
+//                return true;
+//
+//            }
+//
+//            // jika resource di akses langsung
+//            return self::hasPermission($request, 'viewAny ' . parent::uriKey());
+//
+//        } else if ( $request instanceof ResourceDetailRequest ) {
+//            // disini menentukan detail bisa dilihat
+//            // disini menentukan field di resource tersebut bisa dilihat dari resource lain
+//            if ( self::hasPermission( $request, 'view ' . parent::uriKey() )
+//                || self::hasPermission($request, 'create ' . parent::uriKey())
+//                || self::hasPermission($request, 'update ' . parent::uriKey())
+//                || self::hasPermission($request, 'delete ' . parent::uriKey())
+//            ) {
+//
+//                return true;
+//
+//            } else {
+//                // tidak bisa melihat resource yang bukan milik user tersebut
+//
+//                $model = parent::newModel()->find($request->resourceId);
+//                if($model) {
+//                    return true;
+//                    if ( $model->user_id == $request->user()->id ) {
+//
+//                        return true;
+//
+//                    }
+//
+//                    return true;
+//
+//                }
+//
+//                return false;
+//
+//            }
+//        } else if( $request instanceof NovaRequest ) {
+//            // disini menentukan resource bisa ditampilkan untuk user jika return false maka ada error 403
+//
+//            // diakses oleh resource by id
+//            // actions
+//            // filter
+//            // relate-authorization
+//            //
+//            \Debugbar::info(parent::uriKey());
+//            return true;
+//        }
     }
 
     /**
@@ -98,19 +180,6 @@ trait ResourceAuthorization
      */
     public function authorizedToView(Request $request)
     {
-//        $user = $request->user();
-//
-//        if ( self::hasPermission($request, 'viewOwn ' . parent::uriKey()) ) {
-//
-//            if ( parent::model()->user_id == $user->id ) {
-//
-//                return true;
-//
-//            }
-//
-//            return false;
-//        }
-//        return self::hasPermission($request, 'viewAny ' . parent::uriKey());
         $user = $request->user();
 
         // jika user tidak ada permission untuk update
