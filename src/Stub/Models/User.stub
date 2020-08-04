@@ -16,6 +16,8 @@ class User extends Authenticatable
     use HasRoles;
     use Actionable;
 
+    // https://stackoverflow.com/questions/57120581/logging-in-nova-laravel-with-multiple-user-models
+
     /**
      * The attributes that are mass assignable.
      *

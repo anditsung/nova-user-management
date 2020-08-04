@@ -18,6 +18,7 @@ use Laravel\Nova\Fields\Text;
 use Tsung\NovaUserManagement\Fields\PermissionCheckbox;
 use Tsung\NovaUserManagement\Models\Role as RoleModel;
 use Laravel\Nova\Nova;
+use Tsung\NovaUserManagement\Nova\Filters\Active as ActiveFilter;
 use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
 use Tsung\NovaUserManagement\Traits\ResourceQueries;
 
@@ -116,7 +117,9 @@ class Role extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            (new ActiveFilter),
+        ];
     }
 
     /**

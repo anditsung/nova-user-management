@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 
+use Tsung\NovaUserManagement\Nova\Filters\Active as ActiveFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
@@ -110,7 +111,9 @@ class User extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            (new ActiveFilter),
+        ];
     }
 
     /**
