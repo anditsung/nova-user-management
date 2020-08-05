@@ -94,7 +94,8 @@ trait ResourceAuthorization
              * return true jika ingin selalu tampilkan field di index walau user tersebut tidak ada akses ke resource yang dituju
              * dan tidak ada link ke resource tersebut
              */
-            return self::hasPermission($request, 'view ' . parent::uriKey());
+            return self::hasPermission($request, 'view ' . parent::uriKey())
+                || self::hasPermission($request, 'viewAny ' . parent::uriKey());
 
         } else if ( $request instanceof NovaRequest ) {
 
