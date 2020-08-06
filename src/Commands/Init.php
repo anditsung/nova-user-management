@@ -143,13 +143,9 @@ class Init extends Command
             'view ' . strtolower($model) => $model,
             'create ' . strtolower($model) => $model,
             'update ' . strtolower($model) => $model,
-            'updateOwn ' . strtolower($model) => $model,
             'delete ' . strtolower($model) => $model,
-            'deleteOwn ' . strtolower($model) => $model,
             'restore ' . strtolower($model) => $model,
-            'restoreOwn ' . strtolower($model) => $model,
             'forceDelete ' . strtolower($model) => $model,
-            'forceDeleteOwn ' . strtolower($model) => $model,
         ];
 
         $permissions = array_merge($permissions, isset($additional[strtolower($model)]) ? $additional[strtolower($model)] : []);

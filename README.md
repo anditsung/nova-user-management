@@ -14,6 +14,7 @@ composer require laravel/nova
 php artisan nova:install
 ```
 
+
 Install User Management
 if install using folder run this first
 ```
@@ -22,12 +23,15 @@ composer config repositories.nova-user-management path [PACKAGE_PATH]
 ```
 composer require tsung/nova-user-management
 php artisan migrate
+php artisan novaweb:install
 php artisan novauser:install
 php artisan novauser:init
 ```
-Done
 
 ====================
+jika ingin menambahkan permission pada action resource
+maka ganti 'resource' => ActionResource::class,
+yang ada di config/nova.php menjadi class \Tsung\NovaUserManagement\Nova\ActionResource::class
 
 >already add function to patch this when execute install command ( 13-05-2020 )
 

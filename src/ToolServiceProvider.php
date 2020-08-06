@@ -54,14 +54,6 @@ class ToolServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config' => config_path('/'),
         ], 'novauser-config');
-
-        $this->publishes([
-            __DIR__ . '/../../public' => public_path('/vendor/novaweb'),
-        ], 'novaweb-assets');
-
-        $this->publishes([
-            __DIR__ . '/../../resources/views/novaweb' => resource_path('/views'),
-        ], 'novaweb-welcome');
     }
 
     public function registerPolicies()
@@ -72,10 +64,6 @@ class ToolServiceProvider extends ServiceProvider
                 return true;
             }
         });
-
-//        foreach(config('novauser.gates') as $gate => $value) {
-//            Gate::policy($value['model'], $value['policy']);
-//        }
     }
 
     protected function registerTools()
