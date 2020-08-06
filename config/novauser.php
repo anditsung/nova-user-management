@@ -9,6 +9,11 @@ return [
 
     ],
 
+    "models" => [
+        "role" => \Tsung\NovaUserManagement\Models\Role::class,
+        "permission" => \Tsung\NovaUserManagement\Models\Permission::class,
+    ],
+
     'fields' => [
         'permission-checkbox' => [
             /*
