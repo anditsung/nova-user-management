@@ -4,7 +4,7 @@
 
 Install Laravel
 ```
-composer create-project laravel/laravel=6 [PROJECT_NAME]
+composer create-project laravel/laravel=7 [PROJECT_NAME]
 ```
 
 Install Laravel Nova

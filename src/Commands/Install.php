@@ -14,6 +14,8 @@ class Install extends Command
 
     public function handle()
     {
+        $this->novaweb();
+
         $this->replaceUserModel();
 
         $this->replaceUserNova();
@@ -21,6 +23,17 @@ class Install extends Command
         $this->publishConfig();
 
         $this->patchingNovaServiceProviderGate();
+    }
+
+    private function novaweb()
+    {
+        $this->pInfo("Publishing Novaweb Assets");
+        $this->call('vendor:publish', ['--tag' => 'novaweb-assets', '--force' => true]);
+        $this->pInfo("Done Publishing Novaweb Assets");
+
+        $this->pInfo("Publishing Novaweb welcome");
+        $this->call('vendor:publish', ['--tag' => 'novaweb-welcome', '--force' => true]);
+        $this->pInfo("Done Publishing Novaweb Welcome");
     }
 
     private function replaceUserModel()
