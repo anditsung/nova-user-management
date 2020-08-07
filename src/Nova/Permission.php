@@ -63,8 +63,7 @@ class Permission extends Resource
         }
 
         foreach ($novaResources as $resource) {
-            $r = explode('\\', $resource);
-            $allResource[end($r)] = end($r);
+            $allResource[$resource::label()] = $resource::label();
         }
 
         return $allResource;
@@ -84,7 +83,7 @@ class Permission extends Resource
 
         $userResource = Nova::resourceForModel(getModelForGuard($this->guard_name));
 
-        $group = $this->allResources($request);
+        $group = $this::allResources($request);
 
         return [
             //ID::make()->sortable(),
