@@ -14,6 +14,7 @@ Route::group(['middleware'=> 'web'], function() {
 
     // to check user permissions
     if(app()->environment('local')) {
+
         Route::get('/perm', function() {
             $user = Auth()->user();
             if($user) {
@@ -36,6 +37,10 @@ Route::group(['middleware'=> 'web'], function() {
                 echo "NO USER DETECTED";
             }
             die();
+        });
+
+        Route::get('phpinfo', function() {
+            return phpinfo();
         });
     }
 });
