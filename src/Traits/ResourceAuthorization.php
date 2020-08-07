@@ -31,19 +31,19 @@ trait ResourceAuthorization
         }
     }
 
-    /**
-     * Determine if this resource is available for navigation.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    public static function availableForNavigation( Request $request )
-    {
-        if ( static::$displayInNavigation ) {
-            return self::hasPermission( $request, 'viewAny ' . parent::uriKey() );
-        }
-        return false;
-    }
+//    /**
+//     * Determine if this resource is available for navigation.
+//     *
+//     * @param  \Illuminate\Http\Request  $request
+//     * @return bool
+//     */
+//    public static function availableForNavigation( Request $request )
+//    {
+//        if ( static::$displayInNavigation ) {
+//            return self::hasPermission( $request, 'viewAny ' . parent::uriKey() );
+//        }
+//        return false;
+//    }
 
     /**
      * Determine if the resource should be available for the given request.
