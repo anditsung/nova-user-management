@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Tsung\NovaUserManagement\Nova\Filters\Active as ActiveFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Hidden;
@@ -49,6 +51,15 @@ class User extends Resource
 
     public static $displayInNavigation = false;
 
+    public function fieldsForIndex(NovaRequest $request)
+    {
+        return [
+            Text::make('Name'),
+            Text::make('Email'),
+            Boolean::make('Active', 'is_active')
+        ];
+    }
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -59,6 +70,9 @@ class User extends Resource
     {
         return [
             //ID::make()->sortable(),
+
+            Boolean::make('Active', 'is_active')
+                ->default(true),
 
             Text::make('Name')
                 ->sortable()
@@ -79,11 +93,16 @@ class User extends Resource
                 return $request->user()->id;
             }),
 
-            BelongsTo::make(_('Created By'), 'user', User::class)
+            DateTime::make('Created At')
+                ->format('DD MMMM Y, hh:mm:ss A')
                 ->onlyOnDetail(),
 
-            Boolean::make('Active', 'is_active')
-                ->default(true),
+            DateTime::make('Updated At')
+                ->format('DD MMMM Y, hh:mm:ss A')
+                ->onlyOnDetail(),
+
+            BelongsTo::make(_('Created By'), 'user', User::class)
+                ->onlyOnDetail(),
 
             MorphToMany::make(__('Roles'), 'roles', Role::class ),
 

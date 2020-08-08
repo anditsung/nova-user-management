@@ -9,6 +9,7 @@ use App\Nova\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
@@ -101,6 +102,14 @@ class Permission extends Resource
             Hidden::make('User', 'user_id')->default(function($request) {
                 return $request->user()->id;
             }),
+
+            DateTime::make('Created At')
+                ->format('DD MMMM Y, hh:mm:ss A')
+                ->onlyOnDetail(),
+
+            DateTime::make('Updated At')
+                ->format('DD MMMM Y, hh:mm:ss A')
+                ->onlyOnDetail(),
 
             BelongsTo::make(_('Created By'), 'user', User::class)
                 ->onlyOnDetail(),
