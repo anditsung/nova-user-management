@@ -23,7 +23,7 @@ trait ResourceAuthorization
             return true;
         }
 
-        // jika permission tidak terdaftar return true
+        // jika permission tidak terdaftar
         try {
             return $user->hasPermissionTo( $permission_name );
         } catch ( PermissionDoesNotExist $e ) {
@@ -65,6 +65,9 @@ trait ResourceAuthorization
          */
 
         if ( $request instanceof ResourceIndexRequest ) {
+//            \Debugbar::info("RESOURCE INDEX REQUEST");
+//            \Debugbar::info(parent::uriKey());
+//            return true;
 
             if ( $request->resource === parent::uriKey() ) {
 
@@ -84,6 +87,9 @@ trait ResourceAuthorization
             return self::hasPermission($request, 'view ' . parent::uriKey());
 
         } else if ( $request instanceof ResourceDetailRequest ) {
+//            \Debugbar::info("RESOURCE DETAIL REQUEST");
+//            \Debugbar::info(parent::uriKey());
+//            return true;
 
             if ( $request->resource === parent::uriKey() ) {
 
@@ -99,9 +105,17 @@ trait ResourceAuthorization
 
         } else if ( $request instanceof NovaRequest ) {
 
+            /**
+             * lens, scope, search, actions
+             */
+
             if ( $request->resource ) {
 
                 return true;
+
+            } else if ( $request->segment(2) === 'search') { // /nova-api/search
+
+                return self::hasPermission($request, 'viewAny ' . parent::uriKey());
 
             }
 

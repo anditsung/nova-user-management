@@ -110,8 +110,8 @@ class Init extends Command
     {
         return [
             'viewNova' => 'System',
-            'viewAny actions' => 'ActionResource',
-            'view actions' => 'ActionResource',
+            'viewAny action-resources' => 'Actions',
+            'view action-resources' => 'Actions',
         ];
     }
 

@@ -54,19 +54,15 @@ class Permission extends Resource
 
     private function allResources(Request $request)
     {
-        $allResource = [];
-        $novaResources = Nova::$resources;
+        $resources = collect(Nova::$resources)->mapWithKeys(function($resource) {
+            return [$resource::label() => $resource::label()];
+        });
 
-        // hanya administrator yg bisa menambahkan resource group system
         if($request->user()->administrator()) {
-            $allResource['System'] = 'System';
+            $resources = $resources->merge(['System' => 'System']);
         }
 
-        foreach ($novaResources as $resource) {
-            $allResource[$resource::label()] = $resource::label();
-        }
-
-        return $allResource;
+        return $resources->sort();
     }
 
     /**
@@ -157,10 +153,5 @@ class Permission extends Resource
     public function actions(Request $request)
     {
         return [];
-    }
-
-    public static function redirectAfterCreate(NovaRequest $request, $resource)
-    {
-        return '/resources/' . self::uriKey();
     }
 }

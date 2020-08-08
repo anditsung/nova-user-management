@@ -15,9 +15,12 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Tsung\NovaUserManagement\Models\ActionEvent;
+use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
 
 class ActionResource extends Resource
 {
+    use ResourceAuthorization;
+
     /**
      * The model the resource corresponds to.
      *
@@ -26,6 +29,10 @@ class ActionResource extends Resource
     public static $model = ActionEvent::class;
 
     public static $globallySearchable = false;
+
+    public static $group = "User Management";
+
+    public static $displayInNavigation = false;
 
     /**
      * Determine if the current user can create new resources.
@@ -108,17 +115,6 @@ class ActionResource extends Resource
     public static function indexQuery(NovaRequest $request, $query)
     {
         return $query->with('user');
-    }
-
-    /**
-     * Determine if this resource is available for navigation.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    public static function availableForNavigation(Request $request)
-    {
-        return false;
     }
 
     /**

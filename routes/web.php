@@ -10,6 +10,8 @@
 //        Route::post('/password/reset', \Laravel\Nova\Http\Controllers\ResetPasswordController::class . '@reset');
 //});
 
+use Laravel\Nova\Nova;
+
 Route::group(['middleware'=> 'web'], function() {
 
     // to check user permissions
