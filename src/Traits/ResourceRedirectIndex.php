@@ -26,17 +26,6 @@ trait ResourceRedirectIndex
 
         }
 
-        $model = $request->findModelOrFail();
-
-        $morphModel = $model->{$resource::uriKey()};
-
-        if ( $morphModel instanceof Model ) {
-
-            $morphResource = Nova::resourceForModel($morphModel);
-
-            return '/resources/' . $morphResource::uriKey() . '/' . $morphModel->id;
-        }
-
         return '/resources/'.static::uriKey();
     }
 
@@ -55,16 +44,16 @@ trait ResourceRedirectIndex
 
         }
 
-        $model = $request->findModelOrFail();
-
-        $morphModel = $model->{$resource::uriKey()};
-
-        if ( $morphModel instanceof Model ) {
-
-            $morphResource = Nova::resourceForModel($morphModel);
-
-            return '/resources/' . $morphResource::uriKey() . '/' . $morphModel->id;
-        }
+//        $model = $request->findModelOrFail();
+//
+//        $morphModel = $model->{$resource::uriKey()};
+//
+//        if ( $morphModel instanceof Model ) {
+//
+//            $morphResource = Nova::resourceForModel($morphModel);
+//
+//            return '/resources/' . $morphResource::uriKey() . '/' . $morphModel->id;
+//        }
 
         return '/resources/'.static::uriKey();
     }
