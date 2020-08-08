@@ -58,34 +58,34 @@ trait ResourceRedirectIndex
         return '/resources/'.static::uriKey();
     }
 
-    /**
-     * Return the location to redirect the user after deletion.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return string
-     */
-    public static function redirectAfterDelete(NovaRequest $request, $deletedModel)
-    {
-        $morphKey = Str::singular(static::uriKey());
-
-        $morphType = "{$morphKey}_type";
-        $morphId = "{$morphKey}_id";
-
-        if ( $deletedModel->{$morphType} ) {
-
-            $morphModel = $deletedModel->{$morphType};
-
-            $morphResource = Nova::resourceForModel($morphModel);
-
-            return '/resources/' . $morphResource::uriKey() . '/' . $deletedModel->{$morphId};
-
-        }
-
-        if ( $request->viaResource ) {
-
-            return '/resources/' . $request->viaResource . '/' . $request->viaResourceId;
-
-        }
-        return '/resources/'.static::uriKey();
-    }
+//    /**
+//     * Return the location to redirect the user after deletion.
+//     *
+//     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+//     * @return string
+//     */
+//    public static function redirectAfterDelete(NovaRequest $request, $deletedModel)
+//    {
+//        $morphKey = Str::singular(static::uriKey());
+//
+//        $morphType = "{$morphKey}_type";
+//        $morphId = "{$morphKey}_id";
+//
+//        if ( $deletedModel->{$morphType} ) {
+//
+//            $morphModel = $deletedModel->{$morphType};
+//
+//            $morphResource = Nova::resourceForModel($morphModel);
+//
+//            return '/resources/' . $morphResource::uriKey() . '/' . $deletedModel->{$morphId};
+//
+//        }
+//
+//        if ( $request->viaResource ) {
+//
+//            return '/resources/' . $request->viaResource . '/' . $request->viaResourceId;
+//
+//        }
+//        return '/resources/'.static::uriKey();
+//    }
 }
