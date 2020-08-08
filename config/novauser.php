@@ -34,4 +34,10 @@ return [
      * set true to show actions resource on navigation
      */
     'show-actions' => false,
+
+    /*
+     * set have own permissions
+     */
+    'own-permission' => false,
+
 ];

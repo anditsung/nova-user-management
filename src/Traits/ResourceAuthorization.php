@@ -183,6 +183,21 @@ trait ResourceAuthorization
 //        }
     }
 
+    private function hasOwnPermission( Request $request, $permission_name )
+    {
+        if ( config('novauser.own-permission') ) {
+            if ( self::hasPermission( $request, $permission_name ) ) {
+                return true;
+            } else {
+                if ( parent::model()->user_id == $request->user()->id) {
+                    return true;
+                }
+                return false;
+            }
+        }
+        return self::hasPermission($request, $permission_name);
+    }
+
     /**
      * Determine if the current user can view the given resource.
      *
@@ -191,18 +206,7 @@ trait ResourceAuthorization
      */
     public function authorizedToView(Request $request)
     {
-        $user = $request->user();
-
-        // jika user tidak ada permission untuk update
-        // maka user tersebut hanya bisa update data yang dia create sendiri
-        if( self::hasPermission($request, 'view ' . parent::uriKey()) ) {
-            return true;
-        } else {
-            if ( parent::model()->user_id == $user->id ) {
-                return true;
-            }
-            return false;
-        }
+        return $this->hasOwnPermission($request, 'view ' . parent::uriKey());
     }
 
     /**
@@ -224,18 +228,7 @@ trait ResourceAuthorization
      */
     public function authorizedToUpdate(Request $request)
     {
-        $user = $request->user();
-
-        // jika user tidak ada permission untuk update
-        // maka user tersebut hanya bisa update data yang dia create sendiri
-        if( self::hasPermission( $request, 'update ' . parent::uriKey() ) ) {
-            return true;
-        } else {
-            if ( parent::model()->user_id == $user->id ) {
-                return true;
-            }
-            return false;
-        }
+        return $this->hasOwnPermission($request, 'update ' . parent::uriKey());
     }
 
     /**
@@ -246,18 +239,7 @@ trait ResourceAuthorization
      */
     public function authorizedToDelete(Request $request)
     {
-        $user = $request->user();
-
-        // jika user tidak ada permission untuk update
-        // maka user tersebut hanya bisa update data yang dia create sendiri
-        if( self::hasPermission($request, 'delete ' . parent::uriKey()) ) {
-            return true;
-        } else {
-            if ( parent::model()->user_id == $user->id ) {
-                return true;
-            }
-            return false;
-        }
+        return $this->hasOwnPermission($request, 'delete ' . parent::uriKey());
     }
 
     /**
