@@ -18,6 +18,9 @@ trait ResourceAuthorization
     {
         $user = $request->user();
 
+//        \Debugbar::info(">>>>>>>>>>>>");
+//        \Debugbar::info($permission_name);
+
         // jika user adalah administrator maka semua permission selalu true
         if( $user->administrator() ) {
             return true;
@@ -108,79 +111,23 @@ trait ResourceAuthorization
             /**
              * lens, scope, search, actions
              */
-
-            if ( $request->resource ) {
+            if ($request->resource) {
 
                 return true;
 
-            } else if ( $request->segment(2) === 'search') { // /nova-api/search
+            } else if ($request->segment(2) === 'search') { // /nova-api/search
 
                 return self::hasPermission($request, 'viewAny ' . parent::uriKey());
 
             }
-
         } else if ( $request instanceof Request ) {
+
             /**
              * disini mementukan resource tersebut bisa tampil di sidebar laravel nova
              */
             return self::hasPermission($request, 'viewAny ' . parent::uriKey());
 
         }
-
-//        if ( $request instanceof ResourceIndexRequest ) {
-//            \Debugbar::info(parent::uriKey());
-//            // jika resource di akses dari resource yang lain
-//            if ($request->viaResource ) {
-//
-//                // disini menentukan resource bisa diakses dari tempat lain
-//                return true;
-//
-//            }
-//
-//            // jika resource di akses langsung
-//            return self::hasPermission($request, 'viewAny ' . parent::uriKey());
-//
-//        } else if ( $request instanceof ResourceDetailRequest ) {
-//            // disini menentukan detail bisa dilihat
-//            // disini menentukan field di resource tersebut bisa dilihat dari resource lain
-//            if ( self::hasPermission( $request, 'view ' . parent::uriKey() )
-//                || self::hasPermission($request, 'create ' . parent::uriKey())
-//                || self::hasPermission($request, 'update ' . parent::uriKey())
-//                || self::hasPermission($request, 'delete ' . parent::uriKey())
-//            ) {
-//
-//                return true;
-//
-//            } else {
-//                // tidak bisa melihat resource yang bukan milik user tersebut
-//
-//                $model = parent::newModel()->find($request->resourceId);
-//                if($model) {
-//                    return true;
-//                    if ( $model->user_id == $request->user()->id ) {
-//
-//                        return true;
-//
-//                    }
-//
-//                    return true;
-//
-//                }
-//
-//                return false;
-//
-//            }
-//        } else if( $request instanceof NovaRequest ) {
-//            // disini menentukan resource bisa ditampilkan untuk user jika return false maka ada error 403
-//
-//            // diakses oleh resource by id
-//            // actions
-//            // filter
-//            // relate-authorization
-//            //
-//            \Debugbar::info(parent::uriKey());
-//            return true;
-//        }
     }
 
     private function hasOwnPermission( Request $request, $permission_name )
@@ -228,6 +175,7 @@ trait ResourceAuthorization
      */
     public function authorizedToUpdate(Request $request)
     {
+        return true;
         return $this->hasOwnPermission($request, 'update ' . parent::uriKey());
     }
 
