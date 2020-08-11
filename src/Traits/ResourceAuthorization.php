@@ -175,7 +175,6 @@ trait ResourceAuthorization
      */
     public function authorizedToUpdate(Request $request)
     {
-        return true;
         return $this->hasOwnPermission($request, 'update ' . parent::uriKey());
     }
 
