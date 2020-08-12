@@ -7,6 +7,7 @@ namespace Tsung\NovaUserManagement\Traits;
 trait SaveToUpper
 {
     protected $no_uppercase = [
+        'id',                       // jika memakai UUID maka tidak akan menjadi hufur besar
         'password',
         'username',
         'email',
