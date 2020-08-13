@@ -198,6 +198,14 @@ trait ResourceAuthorization
      */
     public function authorizedToAttachAny(NovaRequest $request, $model)
     {
+        $methodName = "attach" . Str::singular(class_basename($model));
+
+        if ( method_exists($this, $methodName) ) {
+
+            return $this->{$methodName};
+
+        }
+
         $permission_name = 'attach'.Str::singular(class_basename($model)) . " " . parent::uriKey();
 
         return self::hasPermission($request, $permission_name);
@@ -213,6 +221,14 @@ trait ResourceAuthorization
      */
     public function authorizedToDetach(NovaRequest $request, $model, $relationship)
     {
+        $methodName = "detach" . Str::singular(class_basename($model));
+
+        if ( method_exists($this, $methodName) ) {
+
+            return $this->{$methodName};
+
+        }
+
         $permission_name = 'detach'.Str::singular(class_basename($model)) . " " . parent::uriKey();
 
         return self::hasPermission($request, $permission_name);
