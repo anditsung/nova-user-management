@@ -1,0 +1,161 @@
+<?php
+
+namespace App\Nova;
+
+
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Tsung\NovaUserManagement\Nova\Filters\Active as ActiveFilter;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Hidden;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphToMany;
+use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
+use Tsung\NovaUserManagement\Nova\Role;
+use Tsung\NovaUserManagement\Nova\Permission;
+use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
+use Tsung\NovaUserManagement\Traits\ResourceQueries;
+
+class User extends Resource
+{
+    use ResourceAuthorization;
+    use ResourceQueries;
+
+    /**
+     * The model the resource corresponds to.
+     *
+     * @var string
+     */
+    public static $model = \App\User::class;
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     *
+     * @var string
+     */
+    public static $title = 'name';
+
+    /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [
+        'id', 'name', 'email',
+    ];
+
+    public static $group = 'User Management';
+
+    public static $displayInNavigation = false;
+
+    public function fieldsForIndex(NovaRequest $request)
+    {
+        return [
+            Text::make('Name'),
+            Text::make('Email'),
+            Boolean::make('Active', 'is_active')
+        ];
+    }
+
+    /**
+     * Get the fields displayed by the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function fields(Request $request)
+    {
+        return [
+            //ID::make()->sortable(),
+
+            Boolean::make('Active', 'is_active')
+                ->default(true),
+
+            Text::make('Name')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Text::make('Email')
+                ->sortable()
+                ->rules('required', 'email', 'max:254')
+                ->creationRules('unique:users,email')
+                ->updateRules('unique:users,email,{{resourceId}}'),
+
+            Password::make('Password')
+                ->onlyOnForms()
+                ->creationRules('required', 'string', 'min:8')
+                ->updateRules('nullable', 'string', 'min:8'),
+
+            Hidden::make('User', 'user_id')->default(function($request) {
+                return $request->user()->id;
+            }),
+
+            DateTime::make('Created At')
+                ->format('DD MMMM Y, hh:mm:ss A')
+                ->onlyOnDetail(),
+
+            DateTime::make('Updated At')
+                ->format('DD MMMM Y, hh:mm:ss A')
+                ->onlyOnDetail(),
+
+            BelongsTo::make(__('Created By'), 'user', User::class)
+                ->onlyOnDetail(),
+
+            MorphToMany::make(__('Roles'), 'roles', Role::class ),
+
+            MorphToMany::make(__('Permissions'), 'permissions', Permission::class)
+                ->searchable(),
+        ];
+    }
+
+    /**
+     * Get the cards available for the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function cards(Request $request)
+    {
+        return [];
+    }
+
+    /**
+     * Get the filters available for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function filters(Request $request)
+    {
+        return [
+            (new ActiveFilter),
+        ];
+    }
+
+    /**
+     * Get the lenses available for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function lenses(Request $request)
+    {
+        return [];
+    }
+
+    /**
+     * Get the actions available for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function actions(Request $request)
+    {
+        return [];
+    }
+
+
+}

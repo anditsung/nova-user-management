@@ -1,0 +1,60 @@
+<?php
+
+namespace App;
+
+
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Nova\Actions\Actionable;
+use Spatie\Permission\Traits\HasRoles;
+use Tsung\NovaUserManagement\Traits\GlobalScopes;
+
+
+class User extends Authenticatable
+{
+    use Notifiable;
+    use HasRoles;
+    use Actionable;
+    use GlobalScopes;
+
+    // https://stackoverflow.com/questions/57120581/logging-in-nova-laravel-with-multiple-user-models
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'user_id', 'is_active'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
+    ];
+
+    public function administrator()
+    {
+        return $this->hasRole('administrator');
+    }
+
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}
