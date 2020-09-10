@@ -28,6 +28,13 @@ class LoginController extends NovaLoginController
         return false;
     }
 
+    /**
+     * melakukan cek user yang login masih aktif
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function login(Request $request)
     {
         $active = $this->isActive($request->only($this->username()));
