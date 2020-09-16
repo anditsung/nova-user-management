@@ -6,10 +6,12 @@ namespace Tsung\NovaUserManagement\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Nova\Actions\Actionable;
 use Spatie\Permission\Models\Role as SpatieRoleModel;
+use Tsung\NovaUserManagement\Traits\GlobalScopes;
 
 class Role extends SpatieRoleModel
 {
-    use Actionable;
+    use Actionable,
+        GlobalScopes;
 
     protected $fillable = [
         'name',

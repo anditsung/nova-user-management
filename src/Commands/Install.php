@@ -25,9 +25,15 @@ class Install extends Command
 
     private function replaceUserModel()
     {
+        $laravelVersion = explode('.', app()->version());
         $this->info('Replacing Default User Model');
-        copy(__DIR__.'/../Stub/Models/User.stub', app_path('User.php'));
-        $this->info("Done");
+        if ($laravelVersion[0] == "8") {
+            copy(__DIR__.'/../Stub/Models/User8.stub', app_path('Models/User.php'));
+            $this->info("Done");
+        } else {
+            copy(__DIR__.'/../Stub/Models/User.stub', app_path('User.php'));
+            $this->info("Done");
+        }
     }
 
     private function replaceUserNova()

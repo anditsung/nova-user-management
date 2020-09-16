@@ -111,7 +111,7 @@ class Permission extends Resource
                 ->format('DD MMMM Y, hh:mm:ss A')
                 ->onlyOnDetail(),
 
-            BelongsTo::make(_('Created By'), 'user', User::class)
+            BelongsTo::make(__('Created By'), 'user', User::class)
                 ->onlyOnDetail(),
 
             BelongsToMany::make(__('Roles'), 'roles', Role::class),
