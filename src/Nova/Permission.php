@@ -92,6 +92,7 @@ class Permission extends Resource
 
             Select::make(__('Group'))
                 ->options($group)
+                ->searchable()
                 ->rules(['required']),
 
             Select::make(__('Guard Name'), 'guard_name')
