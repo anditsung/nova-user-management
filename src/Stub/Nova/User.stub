@@ -104,6 +104,8 @@ class User extends Resource
             BelongsTo::make(__('Created By'), 'user', User::class)
                 ->onlyOnDetail(),
 
+            /** RELATION */
+
             MorphToMany::make(__('Roles'), 'roles', Role::class ),
 
             MorphToMany::make(__('Permissions'), 'permissions', Permission::class)

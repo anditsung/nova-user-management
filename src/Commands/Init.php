@@ -6,6 +6,7 @@ namespace Tsung\NovaUserManagement\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class Init extends Command
 {
@@ -22,9 +23,13 @@ class Init extends Command
 
         $this->info($roleModel);
 
-        $this->info("Create User");
-        $user = $this->createUser($userModel);
-        $this->info("Done");
+        $user = $userModel::first();
+
+        if (!$user) {
+            $this->info("Create User");
+            $user = $this->createUser($userModel);
+            $this->info("Done");
+        }
 
         $this->info("Create administrator Role");
         $role = $this->createAdministratorRole($user, $guard, $roleModel);
@@ -110,6 +115,7 @@ class Init extends Command
     {
         return [
             'viewNova' => 'System',
+            'viewTelescope' => 'System',
             'viewAny action-resources' => 'Actions',
             'view action-resources' => 'Actions',
         ];
@@ -119,36 +125,36 @@ class Init extends Command
     {
         $additional = [
             'users' => [
-                'attachRole ' . strtolower($model) => $model,
-                'detachRole ' . strtolower($model) => $model,
-                'attachPermission ' . strtolower($model) => $model,
-                'detachPermission ' . strtolower($model) => $model,
+                'attachRole ' . Str::slug($model) => $model,
+                'detachRole ' . Str::slug($model) => $model,
+                'attachPermission ' . Str::slug($model) => $model,
+                'detachPermission ' . Str::slug($model) => $model,
             ],
             'roles' => [
-                'attachUser ' . strtolower($model) => $model,
-                'detachUser ' . strtolower($model) => $model,
-                'attachPermission ' . strtolower($model) => $model,
-                'detachPermission ' . strtolower($model) => $model,
+                'attachUser ' . Str::slug($model) => $model,
+                'detachUser ' . Str::slug($model) => $model,
+                'attachPermission ' . Str::slug($model) => $model,
+                'detachPermission ' . Str::slug($model) => $model,
             ],
             'permissions' => [
-                'attachRole ' . strtolower($model) => $model,
-                'detachRole ' . strtolower($model) => $model,
-                'attachUser ' . strtolower($model) => $model,
-                'detachUser ' . strtolower($model) => $model,
+                'attachRole ' . Str::slug($model) => $model,
+                'detachRole ' . Str::slug($model) => $model,
+                'attachUser ' . Str::slug($model) => $model,
+                'detachUser ' . Str::slug($model) => $model,
             ]
         ];
 
         $permissions = [
-            'viewAny ' . strtolower($model) => $model,
-            'view ' . strtolower($model) => $model,
-            'create ' . strtolower($model) => $model,
-            'update ' . strtolower($model) => $model,
-            'delete ' . strtolower($model) => $model,
-            'restore ' . strtolower($model) => $model,
-            'forceDelete ' . strtolower($model) => $model,
+            'viewAny ' . Str::slug($model) => $model,
+            'view ' . Str::slug($model) => $model,
+            'create ' . Str::slug($model) => $model,
+            'update ' . Str::slug($model) => $model,
+            'delete ' . Str::slug($model) => $model,
+            'restore ' . Str::slug($model) => $model,
+            'forceDelete ' . Str::slug($model) => $model,
         ];
 
-        $permissions = array_merge($permissions, isset($additional[strtolower($model)]) ? $additional[strtolower($model)] : []);
+        $permissions = array_merge($permissions, isset($additional[Str::slug($model)]) ? $additional[Str::slug($model)] : []);
         return $permissions;
     }
 }
