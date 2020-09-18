@@ -4,10 +4,12 @@ namespace App;
 
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Nova\Actions\Actionable;
 use Spatie\Permission\Traits\HasRoles;
+use Tsung\NovaMaster\Models\Company;
 use Tsung\NovaUserManagement\Traits\GlobalScopes;
 
 
@@ -51,6 +53,21 @@ class User extends Authenticatable
     public function administrator()
     {
         return $this->hasRole('administrator');
+    }
+
+    /**
+     * function to check the user is online
+     * https://www.codermen.com/blog/94/how-to-check-user-online-or-not-in-laravel
+     * https://stackoverflow.com/questions/50075968/check-if-user-online-laravel
+     */
+//    public function isOnline()
+//    {
+//        return Cache::has('user-is-online-' . $this->id);
+//    }
+
+    public function companies() : BelongsToMany
+    {
+        return $this->belongsToMany(Company::class);
     }
 
     public function user() : BelongsTo

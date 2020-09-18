@@ -3,12 +3,13 @@
 namespace App\Nova;
 
 
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Tsung\NovaMaster\Nova\Company;
 use Tsung\NovaUserManagement\Nova\Filters\Active as ActiveFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Hidden;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
@@ -56,7 +57,10 @@ class User extends Resource
         return [
             Text::make('Name'),
             Text::make('Email'),
-            Boolean::make('Active', 'is_active')
+            Boolean::make('Active', 'is_active'),
+//            Boolean::make('Online', function () {
+//                return $this->isOnline();
+//            }),
         ];
     }
 
@@ -105,6 +109,8 @@ class User extends Resource
                 ->onlyOnDetail(),
 
             /** RELATION */
+
+            BelongsToMany::make('Company', 'companies', Company::class),
 
             MorphToMany::make(__('Roles'), 'roles', Role::class ),
 
