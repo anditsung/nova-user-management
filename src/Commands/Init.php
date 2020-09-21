@@ -116,6 +116,7 @@ class Init extends Command
         return [
             'viewNova' => 'System',
             'viewTelescope' => 'System',
+            'viewBackup' => 'System',
             'viewAny action-resources' => 'Actions',
             'view action-resources' => 'Actions',
         ];
