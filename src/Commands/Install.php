@@ -38,9 +38,15 @@ class Install extends Command
 
     private function replaceUserNova()
     {
+        $laravelVersion = explode('.', app()->version());
         $this->info('Replacing Default User Nova');
-        copy(__DIR__.'/../Stub/Nova/User.stub', app_path('Nova/User.php'));
-        $this->info("Done");
+        if ($laravelVersion[0] == "8") {
+            copy(__DIR__.'/../Stub/Nova/User8.stub', app_path('Nova/User.php'));
+            $this->info("Done");
+        } else {
+            copy(__DIR__.'/../Stub/Nova/User.stub', app_path('Nova/User.php'));
+            $this->info("Done");
+        }
     }
 
     private function publishConfig()
