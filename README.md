@@ -26,6 +26,7 @@ php artisan migrate
 php artisan novaweb:install
 php artisan novauser:install
 php artisan novauser:init
+php artisan passport:install // https://laravel.com/docs/8.x/passport
 ```
 
 ====================
