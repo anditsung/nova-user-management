@@ -21,6 +21,8 @@ class Install extends Command
         $this->publishConfig();
 
         $this->patchingNovaServiceProviderGate();
+
+        $this->patchingAuthServiceProvider();
     }
 
     private function replaceUserModel()
@@ -66,6 +68,20 @@ class Install extends Command
         $novaServiceProviderContent = file_get_contents($novaServiceProviderPath);
         $novaServiceProviderContent = preg_replace($gate_regex, $patchGate, $novaServiceProviderContent);
         file_put_contents($novaServiceProviderPath, $novaServiceProviderContent);
+        $this->info("Done");
+    }
+
+    private function patchingAuthServiceProvider()
+    {
+        $authServiceProviderPath = app_path('Providers/AuthServiceProvider.php');
+
+        $this->info('Patching AuthServiceProvider to add Passport');
+        $authServiceProviderContent = file_get_contents($authServiceProviderPath);
+        $authServiceProviderContent = str_replace(
+            '$this->registerPolicies();',
+            '$this->registerPolicies();\rPassport::routes();\rPassport::tokensExpireIn(now()->addMinutes(60));\rPassport::refreshTokensExpireIn(now()->addHours(3));\r\r',
+        );
+        file_put_contents($authServiceProviderPath, $authServiceProviderContent);
         $this->info("Done");
     }
 }

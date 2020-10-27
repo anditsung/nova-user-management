@@ -16,7 +16,8 @@
         "php": "^7.2.5",
         "laravel/framework": "^7.0|^8.0",
         "laravel/nova": "*",
-        "spatie/laravel-permission": "3.16.0"
+        "spatie/laravel-permission": "3.16.0",
+        "laravel/passport": "^9"
     },
     "autoload": {
         "psr-4": {

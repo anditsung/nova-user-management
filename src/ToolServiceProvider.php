@@ -45,8 +45,6 @@ class ToolServiceProvider extends ServiceProvider
             $this->registerPolicies();
             Nova::tools($this->registerTools());
         });
-
-
     }
 
     protected function registerPublishing()
@@ -87,6 +85,14 @@ class ToolServiceProvider extends ServiceProvider
         Route::middleware(['nova', Authorize::class])
                 ->prefix('nova-vendor/nova-user-management')
                 ->group(__DIR__.'/../routes/api.php');
+
+        /**
+         * mendaftarkan api ke root directory
+         * localhost/api/
+         */
+        Route::prefix('api')
+            ->middleware('api')
+            ->group(__DIR__ . '/../routes/root-api.php');
 
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
     }
