@@ -117,6 +117,7 @@ class Init extends Command
             'viewNova' => 'System',
             'viewTelescope' => 'System',
             'viewBackup' => 'System',
+            'viewLog' => 'System',
             'api' => 'System',
             'viewAny action-resources' => 'Actions',
             'view action-resources' => 'Actions',
