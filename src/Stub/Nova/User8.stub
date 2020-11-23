@@ -165,5 +165,21 @@ class User extends Resource
         return [];
     }
 
+    // fungsi ini akan menghilangkan tombol edit attached dan ada di attach bisa terisi dengan data
+    public function authorizedToAttach(NovaRequest $request, $model)
+    {
+        if ($request->viaResource) {
+            return false;
+        }
 
+        if (! static::authorizable()) {
+            return true;
+        }
+
+        $method = 'attach'.Str::singular(class_basename($model));
+
+        return method_exists(Gate::getPolicyFor($this->model()), $method)
+            ? Gate::check($method, [$this->model(), $model])
+            : true;
+    }
 }
