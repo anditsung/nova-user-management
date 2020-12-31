@@ -58,15 +58,29 @@ class PassportController extends Controller
 
         $passwordClient = Client::where("password_client", true)->first();
 
-        $response = Http::send('POST', env('APP_URL') . '/oauth/token',  [
-            'form_params' => [
-                'grant_type' => 'refresh_token',
-                'refresh_token' => $request->refresh_token,
-                'client_id' => $passwordClient->id,
-                'client_secret' => $passwordClient->secret,
-                'scope' => '*',
-            ],
-        ]);
+        if (config('app.env') == 'local') {
+            $response = Http::send('POST', config('app.url') . '/oauth/token',  [
+                'verify' => false,
+                'form_params' => [
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $request->refresh_token,
+                    'client_id' => $passwordClient->id,
+                    'client_secret' => $passwordClient->secret,
+                    'scope' => '*',
+                ],
+            ]);
+        }
+        else {
+            $response = Http::send('POST', config('app.url') . '/oauth/token',  [
+                'form_params' => [
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $request->refresh_token,
+                    'client_id' => $passwordClient->id,
+                    'client_secret' => $passwordClient->secret,
+                    'scope' => '*',
+                ],
+            ]);
+        }
 
         return json_decode((string) $response->getBody(), true);
 
@@ -76,16 +90,31 @@ class PassportController extends Controller
     {
         $passwordClient = Client::where("password_client", true)->first();
 
-        $response = Http::send('POST', env('APP_URL') . '/oauth/token',  [
-            'form_params' => [
-                'grant_type' => 'password',
-                'client_id' => $passwordClient->id,
-                'client_secret' => $passwordClient->secret,
-                'username' => $username,
-                'password' => $password,
-                'scope' => '*',
-            ]
-        ]);
+        if (config('app.env') == 'local') {
+            $response = Http::send('POST', config('app.url') . '/oauth/token',  [
+                'verify' => false,
+                'form_params' => [
+                    'grant_type' => 'password',
+                    'client_id' => $passwordClient->id,
+                    'client_secret' => $passwordClient->secret,
+                    'username' => $username,
+                    'password' => $password,
+                    'scope' => '*',
+                ]
+            ]);
+        }
+        else {
+            $response = Http::send('POST', config('app.url') . '/oauth/token',  [
+                'form_params' => [
+                    'grant_type' => 'password',
+                    'client_id' => $passwordClient->id,
+                    'client_secret' => $passwordClient->secret,
+                    'username' => $username,
+                    'password' => $password,
+                    'scope' => '*',
+                ]
+            ]);
+        }
 
         $result = json_decode($response->getBody(), true);
 
