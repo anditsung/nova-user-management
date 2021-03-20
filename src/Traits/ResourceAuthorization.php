@@ -72,7 +72,7 @@ trait ResourceAuthorization
 //            \Debugbar::info(parent::uriKey());
 //            return true;
 
-            if ( $request->resource === parent::uriKey() ) {
+            if ( $request->resource === self::uriKey() ) {
 
                 if ( $request->viaResource ) {
 
@@ -80,31 +80,31 @@ trait ResourceAuthorization
 
                 }
 
-                return self::hasPermission($request, 'viewAny ' . parent::uriKey());
+                return self::hasPermission($request, 'viewAny ' . self::uriKey());
 
             }
             /**
              * return true jika ingin selalu tampilkan field di index walau user tersebut tidak ada akses ke resource yang dituju
              * tp tidak ada link ke resource tersebut jika tidak view permission untuk resource tersebut
              */
-            return self::hasPermission($request, 'view ' . parent::uriKey());
+            return self::hasPermission($request, 'view ' . self::uriKey());
 
         } else if ( $request instanceof ResourceDetailRequest ) {
 //            \Debugbar::info("RESOURCE DETAIL REQUEST");
 //            \Debugbar::info(parent::uriKey());
 //            return true;
 
-            if ( $request->resource === parent::uriKey() ) {
+            if ( $request->resource === self::uriKey() ) {
 
-                return self::hasPermission($request, 'view ' . parent::uriKey());
+                return self::hasPermission($request, 'view ' . self::uriKey());
 
             }
             /**
              * return true jika ingin selalu tampilkan field di index walau user tersebut tidak ada akses ke resource yang dituju
              * dan tidak ada link ke resource tersebut
              */
-            return self::hasPermission($request, 'view ' . parent::uriKey())
-                || self::hasPermission($request, 'viewAny ' . parent::uriKey());
+            return self::hasPermission($request, 'view ' . self::uriKey())
+                || self::hasPermission($request, 'viewAny ' . self::uriKey());
 
         } else if ( $request instanceof NovaRequest ) {
 
@@ -117,7 +117,7 @@ trait ResourceAuthorization
 
             } else if ($request->segment(2) === 'search') { // /nova-api/search
 
-                return self::hasPermission($request, 'viewAny ' . parent::uriKey());
+                return self::hasPermission($request, 'viewAny ' . self::uriKey());
 
             }
         } else if ( $request instanceof Request ) {
@@ -125,7 +125,7 @@ trait ResourceAuthorization
             /**
              * disini mementukan resource tersebut bisa tampil di sidebar laravel nova
              */
-            return self::hasPermission($request, 'viewAny ' . parent::uriKey());
+            return self::hasPermission($request, 'viewAny ' . self::uriKey());
 
         }
     }
@@ -136,7 +136,7 @@ trait ResourceAuthorization
             if ( self::hasPermission( $request, $permission_name ) ) {
                 return true;
             } else {
-                if ( parent::model()->user_id == $request->user()->id) {
+                if ( self::model()->user_id == $request->user()->id) {
                     return true;
                 }
                 return false;
@@ -153,7 +153,7 @@ trait ResourceAuthorization
      */
     public function authorizedToView(Request $request)
     {
-        return $this->hasOwnPermission($request, 'view ' . parent::uriKey());
+        return $this->hasOwnPermission($request, 'view ' . self::uriKey());
     }
 
     /**
@@ -164,7 +164,7 @@ trait ResourceAuthorization
      */
     public static function authorizedToCreate(Request $request)
     {
-        return self::hasPermission($request, 'create ' . parent::uriKey());
+        return self::hasPermission($request, 'create ' . self::uriKey());
     }
 
     /**
@@ -175,7 +175,7 @@ trait ResourceAuthorization
      */
     public function authorizedToUpdate(Request $request)
     {
-        return $this->hasOwnPermission($request, 'update ' . parent::uriKey());
+        return $this->hasOwnPermission($request, 'update ' . self::uriKey());
     }
 
     /**
@@ -186,7 +186,7 @@ trait ResourceAuthorization
      */
     public function authorizedToDelete(Request $request)
     {
-        return $this->hasOwnPermission($request, 'delete ' . parent::uriKey());
+        return $this->hasOwnPermission($request, 'delete ' . self::uriKey());
     }
 
     /**
@@ -206,7 +206,7 @@ trait ResourceAuthorization
 
         }
 
-        $permission_name = 'attach'.Str::singular(class_basename($model)) . " " . parent::uriKey();
+        $permission_name = 'attach'.Str::singular(class_basename($model)) . " " . self::uriKey();
 
         return self::hasPermission($request, $permission_name);
     }
@@ -229,7 +229,7 @@ trait ResourceAuthorization
 
         }
 
-        $permission_name = 'detach'.Str::singular(class_basename($model)) . " " . parent::uriKey();
+        $permission_name = 'detach'.Str::singular(class_basename($model)) . " " . self::uriKey();
 
         return self::hasPermission($request, $permission_name);
     }
