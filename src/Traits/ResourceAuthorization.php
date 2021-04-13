@@ -18,9 +18,6 @@ trait ResourceAuthorization
     {
         $user = $request->user();
 
-//        \Debugbar::info(">>>>>>>>>>>>");
-//        \Debugbar::info($permission_name);
-
         // jika user adalah administrator maka semua permission selalu true
         if( $user->administrator() ) {
             return true;
@@ -56,21 +53,7 @@ trait ResourceAuthorization
      */
     public static function authorizedToViewAny( Request $request )
     {
-        /**
-         * jika $request instanceof ResourceIndexRequest
-         * berarti resource awal sedang mengakses request lain agar bisa ditampilkan di detail resource tersebut
-         *
-         * jika $request instanceof ResourceDetailRequest
-         * ini yang menentukan field yang bisa ditampilkan pada detail view pada resource tersebut
-         *
-         * jika $request intanceof NovaRequest
-         * disini menentukan resource tersebut bisa diakses
-         */
-
         if ( $request instanceof ResourceIndexRequest ) {
-//            \Debugbar::info("RESOURCE INDEX REQUEST");
-//            \Debugbar::info(parent::uriKey());
-//            return true;
 
             if ( $request->resource === self::uriKey() ) {
 
@@ -89,10 +72,8 @@ trait ResourceAuthorization
              */
             return self::hasPermission($request, 'view ' . self::uriKey());
 
-        } else if ( $request instanceof ResourceDetailRequest ) {
-//            \Debugbar::info("RESOURCE DETAIL REQUEST");
-//            \Debugbar::info(parent::uriKey());
-//            return true;
+        }
+        else if ( $request instanceof ResourceDetailRequest ) {
 
             if ( $request->resource === self::uriKey() ) {
 
@@ -106,7 +87,9 @@ trait ResourceAuthorization
             return self::hasPermission($request, 'view ' . self::uriKey())
                 || self::hasPermission($request, 'viewAny ' . self::uriKey());
 
-        } else if ( $request instanceof NovaRequest ) {
+        }
+        /** REQUEST FOR LENS SCOPE SEARCH AND ACTIONS */
+        else if ( $request instanceof NovaRequest ) {
 
             /**
              * lens, scope, search, actions
@@ -115,16 +98,17 @@ trait ResourceAuthorization
 
                 return true;
 
-            } else if ($request->segment(2) === 'search') { // /nova-api/search
+            }
+            // IF THE REQUEST IS SEARCH AND THE USER HAVE PERMISSION FOR RESOURCE THEN DO SEARCH
+            else if ($request->segment(2) === 'search') { // /nova-api/search
 
                 return self::hasPermission($request, 'viewAny ' . self::uriKey());
 
             }
-        } else if ( $request instanceof Request ) {
+        }
+        /** IF THE USER HAVE PERMISSION VIEWANY FOR RESOURCE THEN SHOW ON SIDEBAR  */
+        else if ( $request instanceof Request ) {
 
-            /**
-             * disini mementukan resource tersebut bisa tampil di sidebar laravel nova
-             */
             return self::hasPermission($request, 'viewAny ' . self::uriKey());
 
         }
