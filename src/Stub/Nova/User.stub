@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -18,12 +20,10 @@ use Laravel\Nova\Fields\Boolean;
 use Tsung\NovaUserManagement\Nova\Role;
 use Tsung\NovaUserManagement\Nova\Permission;
 use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
-use Tsung\NovaUserManagement\Traits\ResourceQueries;
 
 class User extends Resource
 {
     use ResourceAuthorization;
-    use ResourceQueries;
 
     /**
      * The model the resource corresponds to.
@@ -55,12 +55,14 @@ class User extends Resource
     public function fieldsForIndex(NovaRequest $request)
     {
         return [
-            Text::make('Name'),
-            Text::make('Email'),
-            Boolean::make('Active', 'is_active'),
-//            Boolean::make('Online', function () {
-//                return $this->isOnline();
-//            }),
+//            Text::make('Name', function() {
+//                $resource = Nova::resourceForModel($this->resource);
+//                $url = config('nova.path') . "/resources/" . $resource::uriKey() . "/" . $this->id;
+//                return "<a class='no-underline font-bold dim text-primary' href='{$url}'>{$this->name}</a>";
+//            })->asHtml(),
+            Text::make(__('Name')),
+            Text::make(__('Email')),
+            Boolean::make(__('Active'), 'is_active'),
         ];
     }
 
@@ -75,33 +77,33 @@ class User extends Resource
         return [
             //ID::make()->sortable(),
 
-            Boolean::make('Active', 'is_active')
+            Boolean::make(__('Active'), 'is_active')
                 ->default(true),
 
-            Text::make('Name')
+            Text::make(__('Name'))
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Email')
+            Text::make(__('Email'))
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
-            Password::make('Password')
+            Password::make(__('Password'))
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
-            Hidden::make('User', 'user_id')->default(function($request) {
+            Hidden::make(__('User'), 'user_id')->default(function($request) {
                 return $request->user()->id;
             }),
 
-            DateTime::make('Created At')
+            DateTime::make(__('Created At'))
                 ->format('DD MMMM Y, hh:mm:ss A')
                 ->onlyOnDetail(),
 
-            DateTime::make('Updated At')
+            DateTime::make(__('Updated At'))
                 ->format('DD MMMM Y, hh:mm:ss A')
                 ->onlyOnDetail(),
 
@@ -110,7 +112,7 @@ class User extends Resource
 
             /** RELATION */
 
-            BelongsToMany::make('Company', 'companies', Company::class),
+            BelongsToMany::make(__('Company'), 'companies', Company::class),
 
             MorphToMany::make(__('Roles'), 'roles', Role::class ),
 
