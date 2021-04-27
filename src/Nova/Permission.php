@@ -11,12 +11,10 @@ use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Hidden;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 use Tsung\NovaUserManagement\Models\Permission as PermissionModel;
 use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
@@ -51,8 +49,6 @@ class Permission extends Resource
 
     public static $group = 'User Management';
 
-    public static $displayInNavigation = false;
-
     private function allResources(Request $request)
     {
         $resources = collect(Nova::$resources)->mapWithKeys(function($resource) {
@@ -83,8 +79,6 @@ class Permission extends Resource
         $group = $this::allResources($request);
 
         return [
-            //ID::make()->sortable(),
-
             Text::make(__('Name'), 'name')
                 ->rules(['required', 'string', 'max:255'])
                 ->creationRules('unique:' . config('permission.table_names.permissions'))

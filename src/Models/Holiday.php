@@ -3,25 +3,27 @@
 namespace Tsung\NovaUserManagement\Models;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Laravel\Nova\Actions\Actionable;
-use Spatie\Permission\Models\Role as SpatieRoleModel;
-use Tsung\NovaUserManagement\Traits\GlobalScopes;
+use Tsung\NovaUserManagement\Traits\SaveToUpper;
 
-class Role extends SpatieRoleModel
+class Holiday extends Model
 {
-    use Actionable,
-        GlobalScopes;
+    use SaveToUpper;
+
+    protected $table = 'master_holidays';
+
+    protected $no_upper = [
+    ];
 
     protected $fillable = [
         'name',
-        'guard_name',
-        'is_active',
-        'user_id'
+        'date',
+        'user_id',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'date' => 'date'
     ];
 
     public function user() : BelongsTo

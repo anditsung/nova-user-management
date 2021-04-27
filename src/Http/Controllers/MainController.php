@@ -6,7 +6,7 @@ namespace Tsung\NovaUserManagement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
-class DevController extends Controller
+class MainController extends Controller
 {
     public function testPermission()
     {
@@ -31,6 +31,11 @@ class DevController extends Controller
             echo "NO USER DETECTED";
         }
         die();
+    }
+
+    public function noImage()
+    {
+        return response()->file(__DIR__ . '/../../../resources/image/no-image.png');
     }
 
     public function phpinfo()

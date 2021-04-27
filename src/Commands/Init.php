@@ -7,6 +7,7 @@ namespace Tsung\NovaUserManagement\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Tsung\NovaUserManagement\Models\Unit;
 
 class Init extends Command
 {
@@ -47,7 +48,106 @@ class Init extends Command
         $user->assignRole($role);
         $this->info("Done");
 
+        $this->info("Add default units");
+        $this->initDefaultUnits($user);
+        $this->info('Done');
+
         $this->info("Finish");
+    }
+
+    private function initDefaultUnits($user)
+    {
+        $units = [
+            [
+                "name" => "piece",
+                "abbr" => "pc",
+                "is_active" => true,
+            ],
+            [
+                "name" => "meter",
+                "abbr" => "mtr",
+                "is_active" => true,
+            ],
+            [
+                "name" => "litre",
+                "abbr" => "ltr",
+                "is_active" => true,
+            ],
+            [
+                "name" => "pair",
+                "abbr" => "prs",
+                "is_active" => true,
+            ],
+            [
+                "name" => "roll",
+                "abbr" => "rol",
+                "is_active" => true,
+            ],
+            [
+                "name" => "kilogram",
+                "abbr" => "kg",
+                "is_active" => true,
+            ],
+            [
+                "name" => "box",
+                "abbr" => "box",
+                "is_active" => true,
+            ],
+            [
+                "name" => "bag",
+                "abbr" => "bag",
+                "is_active" => true,
+            ],
+            [
+                "name" => "sheet",
+                "abbr" => "sht",
+                "is_active" => true,
+            ],
+            [
+                "name" => "tube",
+                "abbr" => "tub",
+                "is_active" => true,
+            ],
+            [
+                "name" => "pack",
+                "abbr" => "pac",
+                "is_active" => true,
+            ],
+            [
+                "name" => "bottle",
+                "abbr" => "btl",
+                "is_active" => true,
+            ],
+            [
+                "name" => "stick",
+                "abbr" => "stk",
+                "is_active" => true,
+            ],
+            [
+                "name" => "set",
+                "abbr" => "set",
+                "is_active" => true,
+            ],
+            [
+                "name" => "drum",
+                "abbr" => "drm",
+                "is_active" => true,
+            ],
+            [
+                "name" => "can",
+                "abbr" => "can",
+                "is_active" => true,
+            ],
+            [
+                "name" => "bucket",
+                "abbr" => "bkt",
+                "is_active" => true,
+            ],
+        ];
+
+        foreach ($units as $unit) {
+            Unit::create($unit);
+        }
     }
 
     private function createAdministratorRole($user, $guard, $roleModel)

@@ -10,16 +10,16 @@
 //        Route::post('/password/reset', \Laravel\Nova\Http\Controllers\ResetPasswordController::class . '@reset');
 //});
 
-use Tsung\NovaUserManagement\Http\Controllers\DevController;
+use Tsung\NovaUserManagement\Http\Controllers\MainController;
 
 Route::group(['middleware'=> 'web'], function() {
 
     // to check user permissions
     if(app()->environment('local')) {
 
-        Route::get('/perm', [DevController::class, 'testPermission']);
+        Route::get('/perm', [MainController::class, 'testPermission']);
 
-        Route::get('phpinfo',[DevController::class, 'phpinfo']);
+        Route::get('phpinfo',[MainController::class, 'phpinfo']);
     }
 });
 

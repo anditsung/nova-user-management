@@ -1,23 +1,25 @@
 <?php
 
-
 namespace Tsung\NovaUserManagement\Models;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Laravel\Nova\Actions\Actionable;
-use Spatie\Permission\Models\Permission as SpatiePermissionModel;
 
-class Permission extends SpatiePermissionModel
+class Configuration extends Model
 {
-    use Actionable;
+    protected $table = 'master_configurations';
 
     protected $fillable = [
         'name',
-        'group',
-        'guard_name',
+        'config',
         'user_id',
     ];
+
+    public static function getConfig(string $configName)
+    {
+        return self::where('name', $configName)->first();
+    }
 
     public function user() : BelongsTo
     {

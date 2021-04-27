@@ -1,28 +1,22 @@
 <?php
 
-
 namespace Tsung\NovaUserManagement\Nova;
-
 
 use App\Nova\Resource;
 use App\Nova\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Hidden;
-use Laravel\Nova\Fields\MorphToMany;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Tsung\NovaUserManagement\Fields\PermissionCheckbox;
-use Tsung\NovaUserManagement\Models\Role as RoleModel;
-use Laravel\Nova\Nova;
-use Tsung\NovaUserManagement\Nova\Filters\Active as ActiveFilter;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
+use Tsung\NovaUserManagement\Traits\ResourceQueries;
 use Tsung\NovaUserManagement\Traits\ResourceRedirectIndex;
 
-class Role extends Resource
+class Unit extends Resource
 {
     use ResourceAuthorization,
         ResourceRedirectIndex;
@@ -32,14 +26,14 @@ class Role extends Resource
      *
      * @var string
      */
-    public static $model = RoleModel::class;
+    public static $model = \Tsung\NovaUserManagement\Models\Unit::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -47,10 +41,23 @@ class Role extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id',
     ];
 
-    public static $group = 'User Management';
+    public static $group = "Master";
+
+    public static $globallySearchable = false;
+
+    public function fieldsForIndex(NovaRequest $request)
+    {
+        return [
+            Text::make(__('Name')),
+
+            Text::make(__('ABBR')),
+
+            Boolean::make(__('Active'), 'is_active')
+        ];
+    }
 
     /**
      * Get the fields displayed by the resource.
@@ -60,28 +67,20 @@ class Role extends Resource
      */
     public function fields(Request $request)
     {
-        $guardOptions = collect(config('auth.guards'))->mapWithKeys(function ($value, $key) {
-            return [$key => $key];
-        });
-
-        $userResource = Nova::resourceForModel(getModelForGuard($this->guard_name));
-
         return [
-            Text::make(__('Name'))
-                ->rules(['required', 'string', 'max:255'])
-                ->creationRules('unique:' . config('permission.table_names.roles'))
-                ->updateRules('unique:' . config('permission.table_names.roles') . ',name,{{resourceId}}'),
-
-            Select::make(__('Guard Name'), 'guard_name')
-                ->options($guardOptions->toArray())
-                ->rules(['required', Rule::in($guardOptions)]),
-
-            Boolean::make('Active', 'is_active')
+            Boolean::make(__('Active'), 'is_active')
                 ->default(true),
 
-            Hidden::make('User', 'user_id')->default(function($request) {
-                return $request->user()->id;
-            }),
+            Text::make(__('Name'))
+                ->rules('required'),
+
+            Text::make(__('ABBR'))
+                ->rules('required')
+                ->creationRules('unique:master_units,abbr')
+                ->updateRules('unique:master_units,abbr,{{resourceId}}'),
+
+            Hidden::make('user_id')
+                ->default($request->user()->id),
 
             DateTime::make('Created At')
                 ->format('DD MMMM Y, hh:mm:ss A')
@@ -91,14 +90,8 @@ class Role extends Resource
                 ->format('DD MMMM Y, hh:mm:ss A')
                 ->onlyOnDetail(),
 
-            BelongsTo::make(__('Created By'), 'user', User::class)
+            BelongsTo::make('Created By', 'user', User::class)
                 ->onlyOnDetail(),
-
-            PermissionCheckbox::make(__('Permissions')),
-
-            MorphToMany::make($userResource::label(), 'users', $userResource)->searchable(),
-
-            //BelongsToMany::make(__('Permissions'), 'permissions', Permission::class),
         ];
     }
 
@@ -121,9 +114,7 @@ class Role extends Resource
      */
     public function filters(Request $request)
     {
-        return [
-            (new ActiveFilter),
-        ];
+        return [];
     }
 
     /**

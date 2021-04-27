@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,11 +15,11 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    use HasRoles;
-    use Actionable;
-    use GlobalScopes;
-    use HasApiTokens;
+    use Notifiable,
+        HasRoles,
+        Actionable,
+        GlobalScopes,
+        HasApiTokens;
 
     // https://stackoverflow.com/questions/57120581/logging-in-nova-laravel-with-multiple-user-models
 
@@ -68,7 +68,7 @@ class User extends Authenticatable
 
     public function companies() : BelongsToMany
     {
-        return $this->belongsToMany(Company::class);
+        return $this->belongsToMany(Company::class, 'master_company_user');
     }
 
     public function user() : BelongsTo

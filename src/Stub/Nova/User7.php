@@ -45,21 +45,14 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'name', 'email',
     ];
 
     public static $group = 'User Management';
 
-    public static $displayInNavigation = false;
-
     public function fieldsForIndex(NovaRequest $request)
     {
         return [
-//            Text::make('Name', function() {
-//                $resource = Nova::resourceForModel($this->resource);
-//                $url = config('nova.path') . "/resources/" . $resource::uriKey() . "/" . $this->id;
-//                return "<a class='no-underline font-bold dim text-primary' href='{$url}'>{$this->name}</a>";
-//            })->asHtml(),
             Text::make(__('Name')),
             Text::make(__('Email')),
             Boolean::make(__('Active'), 'is_active'),
@@ -75,8 +68,6 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            //ID::make()->sortable(),
-
             Boolean::make(__('Active'), 'is_active')
                 ->default(true),
 
@@ -95,9 +86,8 @@ class User extends Resource
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
-            Hidden::make(__('User'), 'user_id')->default(function($request) {
-                return $request->user()->id;
-            }),
+            Hidden::make(__('User'), 'user_id')
+                ->default($request->user()->id),
 
             DateTime::make(__('Created At'))
                 ->format('DD MMMM Y, hh:mm:ss A')

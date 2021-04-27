@@ -30,10 +30,10 @@ class Install extends Command
         $laravelVersion = explode('.', app()->version());
         $this->info('Replacing Default User Model');
         if ($laravelVersion[0] == "8") {
-            copy(__DIR__.'/../Stub/Models/User8.stub', app_path('Models/User.php'));
+            copy(__DIR__.'/../Stub/Models/User8.php', app_path('Models/User.php'));
             $this->info("Done");
         } else {
-            copy(__DIR__.'/../Stub/Models/User.stub', app_path('User.php'));
+            copy(__DIR__.'/../Stub/Models/User7.php', app_path('User.php'));
             $this->info("Done");
         }
     }
@@ -43,10 +43,10 @@ class Install extends Command
         $laravelVersion = explode('.', app()->version());
         $this->info('Replacing Default User Nova');
         if ($laravelVersion[0] == "8") {
-            copy(__DIR__.'/../Stub/Nova/User8.stub', app_path('Nova/User.php'));
+            copy(__DIR__.'/../Stub/Nova/User8.php', app_path('Nova/User.php'));
             $this->info("Done");
         } else {
-            copy(__DIR__.'/../Stub/Nova/User.stub', app_path('Nova/User.php'));
+            copy(__DIR__.'/../Stub/Nova/User7.php', app_path('Nova/User.php'));
             $this->info("Done");
         }
     }
@@ -79,7 +79,11 @@ class Install extends Command
         $authServiceProviderContent = file_get_contents($authServiceProviderPath);
         $authServiceProviderContent = str_replace(
             '$this->registerPolicies();',
-            '$this->registerPolicies();\rPassport::routes();\rPassport::tokensExpireIn(now()->addMinutes(60));\rPassport::refreshTokensExpireIn(now()->addHours(3));\r\r',
+            '$this->registerPolicies();
+        \Laravel\Passport\Passport::routes();
+        \Laravel\Passport\Passport::tokensExpireIn(now()->addMinutes(60));
+        \Laravel\Passport\Passport::refreshTokensExpireIn(now()->addHours(3));',
+            $authServiceProviderContent
         );
         file_put_contents($authServiceProviderPath, $authServiceProviderContent);
         $this->info("Done");
