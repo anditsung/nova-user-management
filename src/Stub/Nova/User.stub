@@ -80,6 +80,9 @@ class User extends Resource
             Boolean::make(__('Active'), 'is_active')
                 ->default(true),
 
+            Boolean::make(__('Admin'), 'is_admin')
+                ->default(false),
+
             Text::make(__('Name'))
                 ->sortable()
                 ->rules('required', 'max:255'),

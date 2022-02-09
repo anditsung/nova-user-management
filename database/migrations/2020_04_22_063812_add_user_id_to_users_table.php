@@ -16,6 +16,7 @@ class AddUserIdToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->boolean('is_active');
+            $table->boolean('is_admin')->default(false);
         });
     }
 
