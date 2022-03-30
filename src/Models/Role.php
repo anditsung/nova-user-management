@@ -4,8 +4,10 @@ namespace Tsung\NovaUserManagement\Models;
 
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Nova\Actions\Actionable;
 use Spatie\Permission\Models\Role as SpatieRoleModel;
+use Spatie\Permission\PermissionRegistrar;
 use Tsung\NovaUserManagement\Traits\GlobalScopes;
 
 class Role extends SpatieRoleModel
@@ -38,5 +40,20 @@ class Role extends SpatieRoleModel
     public function user() : BelongsTo
     {
         return $this->belongsTo(config('auth.providers.users.model'));
+    }
+
+    /**
+     * adding using to catch attach and detach event
+     *
+     * A role may be given various permissions.
+     */
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            config('permission.models.permission'),
+            config('permission.table_names.role_has_permissions'),
+            PermissionRegistrar::$pivotRole,
+            PermissionRegistrar::$pivotPermission
+        )->using(PermissionRole::class);
     }
 }
