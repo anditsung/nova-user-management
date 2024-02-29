@@ -4,49 +4,55 @@
 namespace Tsung\NovaUserManagement\Policies;
 
 
-class RolePolicy extends Policy
+use App\Policies\BasePolicy;
+use App\User;
+
+class RolePolicy extends BasePolicy
 {
-    public static $key = 'roles';
+    public function __construct()
+    {
+        $this->uriKey = 'roles';
+    }
 
     /*
      * attach button visible
      */
-    public function attachAnyUser($user)
+    public function attachAnyUser(User $user)
     {
-        return $user->hasPermissionTo('attachUser ' . static::$key);
+        return $user->hasPermissionTo('attachUser ' . $this->uriKey);
     }
 
     /*
      * able to add and update role
      */
-    public function attachUser($user)
+    public function attachUser(User $user)
     {
         if(request()->request->get('viaResource')) {
             return false;
         }
-        return $user->hasPermissionTo('attachUser ' . static::$key);
+        return $user->hasPermissionTo('attachUser ' . $this->uriKey);
     }
 
-    public function detachUser($user)
+    public function detachUser(User $user)
     {
-        return $user->hasPermissionTo('detachUser ' . static::$key);
+        return $user->hasPermissionTo('detachUser ' . $this->uriKey);
     }
 
-    public function attachAnyPermission($user)
+    public function attachAnyPermission(User $user)
     {
-        return $user->hasPermissionTo('attachPermission ' . static::$key);
+        return $user->hasPermissionTo('attachPermission ' . $this->uriKey);
     }
 
-    public function attachPermission($user)
+    public function attachPermission(User $user)
     {
         if(request()->request->get('viaResource')) {
             return false;
         }
-        return $user->hasPermissionTo('attachPermission ' . static::$key);
+        return $user->hasPermissionTo('attachPermission ' . $this->uriKey);
     }
 
-    public function detachPermission($user)
+    public function detachPermission(User $user)
     {
-        return $user->hasPermissionTo('detachPermission ' . static::$key);
+        return $user->hasPermissionTo('detachPermission ' . $this->uriKey);
     }
 }
