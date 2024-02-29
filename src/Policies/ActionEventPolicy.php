@@ -4,7 +4,9 @@
 namespace Tsung\NovaUserManagement\Policies;
 
 
-class ActionEventPolicy
+use App\Policies\BasePolicy;
+
+class ActionEventPolicy extends BasePolicy
 {
     public function viewAny($user)
     {

@@ -19,13 +19,14 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 use Tsung\NovaUserManagement\Models\Permission as PermissionModel;
+use Tsung\NovaUserManagement\Nova\Actions\ForgetCachePermission;
 use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
 use Tsung\NovaUserManagement\Traits\ResourceRedirectIndex;
 
 class Permission extends Resource
 {
-    use ResourceAuthorization,
-        ResourceRedirectIndex;
+    use ResourceRedirectIndex;
+
     /**
      * The model the resource corresponds to.
      *
@@ -162,6 +163,8 @@ class Permission extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            ForgetCachePermission::make(),
+        ];
     }
 }
