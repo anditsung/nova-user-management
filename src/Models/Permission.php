@@ -42,11 +42,13 @@ class Permission extends SpatiePermissionModel
      */
     public function roles(): BelongsToMany
     {
+        $registrar = app(PermissionRegistrar::class);
+
         return $this->belongsToMany(
             config('permission.models.role'),
             config('permission.table_names.role_has_permissions'),
-            PermissionRegistrar::$pivotPermission,
-            PermissionRegistrar::$pivotRole
+            $registrar->pivotPermission,
+            $registrar->pivotRole
         )->using(PermissionRole::class);
     }
 }
