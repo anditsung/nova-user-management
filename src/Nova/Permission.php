@@ -16,11 +16,10 @@ use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Nova;
+use NovaAttachMany\AttachMany;
 use Tsung\NovaUserManagement\Models\Permission as PermissionModel;
+use Tsung\NovaUserManagement\Nova\Actions\CreateBatchPermission;
 use Tsung\NovaUserManagement\Nova\Actions\ForgetCachePermission;
-use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
 use Tsung\NovaUserManagement\Traits\ResourceRedirectIndex;
 
 class Permission extends Resource
@@ -54,17 +53,12 @@ class Permission extends Resource
 
     public static $displayInNavigation = false;
 
-    private function allResources(Request $request)
+    public function fieldsForIndex(Request $request): array
     {
-        $resources = collect(Nova::$resources)->mapWithKeys(function($resource) {
-            return [$resource::label() => $resource::label()];
-        });
-
-        if($request->user()->administrator()) {
-            $resources = $resources->merge(['System' => 'System']);
-        }
-
-        return $resources->sort();
+        return [
+            Text::make(__('Name'), 'name'),
+            Select::make(__('Guard Name'), 'guard_name'),
+        ];
     }
 
     /**
@@ -79,27 +73,24 @@ class Permission extends Resource
             return [$key => $key];
         });
 
-        $userResource = Nova::resourceForModel(getModelForGuard($this->guard_name));
-
-        $group = $this::allResources($request);
-
         return [
-            //ID::make()->sortable(),
+            ID::make()->sortable(),
 
             Text::make(__('Name'), 'name')
                 ->rules(['required', 'string', 'max:255'])
                 ->creationRules('unique:' . config('permission.table_names.permissions'))
                 ->updateRules('unique:' . config('permission.table_names.permissions') . ',name,{{resourceId}}'),
 
-            Select::make(__('Group'))
-                ->options($group)
-                ->searchable()
-                ->rules(['required']),
+            Text::make(__('Group'), 'group')
+                ->rules([
+                    'required',
+                    'max:255',
+                    'string',
+                ]),
 
             Select::make(__('Guard Name'), 'guard_name')
                 ->options($guardOptions->toArray())
-                ->rules(['required', Rule::in($guardOptions)])
-                ->hideFromIndex(),
+                ->rules(['required', Rule::in($guardOptions)]),
 
             Hidden::make('User', 'user_id')->default(function($request) {
                 return $request->user()->id;
@@ -116,9 +107,28 @@ class Permission extends Resource
             BelongsTo::make(__('Created By'), 'user', User::class)
                 ->onlyOnDetail(),
 
-            BelongsToMany::make(__('Roles'), 'roles', Role::class),
+            Text::make(__('Roles'), function () {
+                return $this->roles->count();
+            })
+                ->exceptOnForms(),
 
-            MorphToMany::make($userResource::label(), 'users', $userResource)->searchable(),
+            Text::make(__('Users'), function () {
+                return $this->users->count();
+            })->exceptOnForms(),
+
+            MorphToMany::make(__('Users'), 'users', User::class)
+                ->withSubtitles()
+                ->searchable(),
+
+            AttachMany::make(__('Users'), 'users', User::class)
+                ->showCounts(),
+
+            BelongsToMany::make(__('Roles'), 'roles', Role::class)
+                ->withSubtitles()
+                ->searchable(),
+
+            AttachMany::make(__('Roles'), 'roles', Role::class)
+                ->showCounts(),
         ];
     }
 
@@ -164,6 +174,7 @@ class Permission extends Resource
     public function actions(Request $request)
     {
         return [
+            CreateBatchPermission::make(),
             ForgetCachePermission::make(),
         ];
     }

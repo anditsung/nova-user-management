@@ -12,8 +12,8 @@ use Tsung\NovaUserManagement\Traits\GlobalScopes;
 
 class Role extends SpatieRoleModel
 {
-    use Actionable,
-        GlobalScopes;
+    use Actionable;
+    use GlobalScopes;
 
     protected $fillable = [
         'name',
