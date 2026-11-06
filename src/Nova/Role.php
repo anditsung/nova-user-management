@@ -9,19 +9,18 @@ use App\Nova\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Hidden;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Tsung\NovaUserManagement\Fields\PermissionCheckbox;
+use NovaAttachMany\AttachMany;
 use Tsung\NovaUserManagement\Models\Role as RoleModel;
 use Laravel\Nova\Nova;
 use Tsung\NovaUserManagement\Nova\Actions\ForgetCachePermission;
 use Tsung\NovaUserManagement\Nova\Filters\Active as ActiveFilter;
-use Tsung\NovaUserManagement\Traits\ResourceAuthorization;
 use Tsung\NovaUserManagement\Traits\ResourceQueries;
 
 class Role extends Resource
@@ -55,6 +54,15 @@ class Role extends Resource
 
     public static $displayInNavigation = false;
 
+    public function fieldsForIndex(Request $request): array
+    {
+        return [
+            Text::make(__('Name'), 'name'),
+            Select::make(__('Guard Name'), 'guard_name'),
+            Boolean::make('Active', 'is_active'),
+        ];
+    }
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -70,19 +78,18 @@ class Role extends Resource
         $userResource = Nova::resourceForModel(getModelForGuard($this->guard_name));
 
         return [
-            //ID::make()->sortable(),
+            Boolean::make('Active', 'is_active')
+                ->default(true),
 
-            Text::make(__('Name'))
+            Text::make(__('Name'), 'name')
                 ->rules(['required', 'string', 'max:255'])
                 ->creationRules('unique:' . config('permission.table_names.roles'))
                 ->updateRules('unique:' . config('permission.table_names.roles') . ',name,{{resourceId}}'),
 
             Select::make(__('Guard Name'), 'guard_name')
                 ->options($guardOptions->toArray())
-                ->rules(['required', Rule::in($guardOptions)]),
-
-            Boolean::make('Active', 'is_active')
-                ->default(true),
+                ->rules(['required', Rule::in($guardOptions)])
+                ->searchable(),
 
             Hidden::make('User', 'user_id')->default(function($request) {
                 return $request->user()->id;
@@ -99,11 +106,28 @@ class Role extends Resource
             BelongsTo::make(__('Created By'), 'user', User::class)
                 ->onlyOnDetail(),
 
-            PermissionCheckbox::make(__('Permissions')),
+            MorphToMany::make(__('Users'), 'users', User::class)
+                ->withSubtitles()
+                ->searchable(),
 
-            MorphToMany::make($userResource::label(), 'users', $userResource)->searchable(),
+            AttachMany::make(__('Users'), 'users', User::class)
+                ->showCounts(),
 
-            //BelongsToMany::make(__('Permissions'), 'permissions', Permission::class),
+            BelongsToMany::make(__('Permissions'), 'permissions', Permission::class)
+                ->withSubtitles()
+                ->searchable(),
+
+            AttachMany::make(__('Permissions'), 'permissions', Permission::class)
+                ->showCounts(),
+
+            Text::make(__('Permissions'), function () {
+                return $this->permissions->count();
+            })
+                ->exceptOnForms(),
+
+            Text::make(__('Users'), function () {
+                return $this->users->count();
+            })->exceptOnForms(),
         ];
     }
 
